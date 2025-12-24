@@ -44,5 +44,10 @@
 ---
 7. #### After finishing run this to compile files from ts to js
     ```
-    npx tsc
+    npx tsc 
+    ```
+    or
+    
+    ```
+    npx tsc -w
     ```
