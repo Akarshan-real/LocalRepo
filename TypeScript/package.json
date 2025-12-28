@@ -1,5 +1,5 @@
 {
-  "name": "video-8-.-9",
+  "name": "typescript",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
 }
