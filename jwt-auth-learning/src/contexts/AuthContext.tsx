@@ -8,6 +8,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    
     useEffect(() => {
         const token = cookieStuff.getToken();
         if (token) {
@@ -26,8 +27,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 console.error(`Invalid token ${error}`);
                 cookieStuff.removeToken();
                 setUser(null);
-            }
-        }
+            };
+        };
         setLoading(false);
     }, []);
 

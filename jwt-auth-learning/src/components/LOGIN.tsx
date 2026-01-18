@@ -1,96 +1,139 @@
-import { useForm, type SubmitHandler } from 'react-hook-form'
-import { useNavigate, Link } from 'react-router-dom'
-import {type LoginCredentials } from '../types/auth.types' 
+// src/components/LOGIN.tsx
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { api } from '../utils/api';
+import { type LoginCredentials, type LoginResponse } from '../types/auth.types';
+import { useState } from 'react';
+import { mockLogin } from '../utils/mockAuth';
 
-const Login = () => {
+function LOGIN() {
+  const [apiError, setApiError] = useState('');
+  const [useMock, setUseMock] = useState<boolean>(true);
+
+  const { login } = useAuth();
   const navigate = useNavigate();
-  const { 
-      register, 
-      handleSubmit, 
-      setError, 
-      formState: { errors, isSubmitting } 
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting }
   } = useForm<LoginCredentials>();
 
   const onSubmit: SubmitHandler<LoginCredentials> = async (data) => {
-    try {
+    setApiError('');
 
-    } catch (error) {
-        setError("root", { message: "Something went wrong!" });
+    try {
+      if (useMock) {
+        const mockResponse = await mockLogin(data.name, data.password);
+        login(mockResponse.token);
+        navigate('/authorized');
+      } else {
+        const response = await api.post('/login', data);
+        const responseData: LoginResponse = response.data;
+        login(responseData.token);
+        navigate('/authorized');
+      }
+
+    } catch (err: any) {
+      console.error('Login failed:', err);
+      setApiError(err.message || err.response?.data?.message || 'Login failed. Please try again.');
     }
-  }
+  };
 
   return (
-    <div className="w-full min-h-screen flex">
-      
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-white px-8 md:px-16 lg:px-24">
-        <div className="w-full max-w-md">
-            
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-2">Welcome back!</h1>
-          <p className="text-gray-500 mb-8">Please enter your details to sign in.</p>
+    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px' }}>
+      <h2>Login</h2>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            
-            {/* name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">name</label>
-              <input 
-                {...register("name", { required: "name is required" })}
-                type="name"
-                placeholder="mail@site.com"
-                className={`w-full px-4 py-3 rounded-lg border bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all
-                   ${errors.name ? 'border-red-500' : 'border-gray-200'}
-                `}
-              />
-              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
-            </div>
-
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <input 
-                {...register("password", { required: "Password is required" })}
-                type="password"
-                placeholder="••••••••"
-                className={`w-full px-4 py-3 rounded-lg border bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all
-                   ${errors.password ? 'border-red-500' : 'border-gray-200'}
-                `}
-              />
-              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
-            </div>
-
-            {/* Forgot Password Link */}
-            <div className="flex justify-end">
-              <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">Forgot Password?</Link>
-            </div>
-
-            {/* Button */}
-            <button 
-              disabled={isSubmitting}
-              type="submit" 
-              className="w-full bg-black text-white font-bold py-3 rounded-lg hover:bg-gray-800 transition duration-300 transform active:scale-95 disabled:opacity-50"
-            >
-              {isSubmitting ? 'Loading...' : 'Sign In'}
-            </button>
-          </form>
-
-          <div className="mt-8 text-center text-sm text-gray-600">
-            Don't have an account? <Link to="/signup" className="font-bold text-black hover:underline">Sign up for free</Link>
+      <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        {apiError && (
+          <div style={{ padding: '10px', backgroundColor: '#fee', color: '#c00', borderRadius: '4px' }}>
+            {apiError}
           </div>
+        )}
+
+        <div>
+          <label htmlFor="name" style={{ display: 'block', marginBottom: '5px' }}>
+            Name:
+          </label>
+          <input
+            id="name"
+            type="text"
+            {...register('name', {
+              required: 'Name is required',
+              minLength: {
+                value: 3,
+                message: 'Name must be at least 3 characters'
+              }
+            })}
+            style={{
+              width: '100%',
+              padding: '8px',
+              fontSize: '16px',
+              borderColor: errors.name ? 'red' : '#ccc'
+            }}
+          />
+          {errors.name && (
+            <span style={{ color: 'red', fontSize: '14px' }}>
+              {errors.name.message}
+            </span>
+          )}
         </div>
-      </div>
 
-      {/* RIGHT SIDE: The Image (Hidden on mobile) */}
-      <div className="hidden lg:flex w-1/2 bg-blue-600 items-center justify-center relative overflow-hidden">
-         {/* Decorative circles/abstract bg */}
-         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-600 to-indigo-900 opacity-90"></div>
-         <div className="relative z-10 text-white text-center px-10">
-            <h2 className="text-4xl font-bold mb-4">"Code like a pro."</h2>
-            <p className="text-lg text-blue-100">Join our community of developers today.</p>
-         </div>
-      </div>
+        <div>
+          <label htmlFor="password" style={{ display: 'block', marginBottom: '5px' }}>
+            Password:
+          </label>
+          <input
+            id="password"
+            type="password"
+            {...register('password', {
+              required: 'Password is required',
+              minLength: {
+                value: 6,
+                message: 'Password must be at least 6 characters'
+              }
+            })}
+            style={{
+              width: '100%',
+              padding: '8px',
+              fontSize: '16px',
+              borderColor: errors.password ? 'red' : '#ccc'
+            }}
+          />
+          {errors.password && (
+            <span style={{ color: 'red', fontSize: '14px' }}>
+              {errors.password.message}
+            </span>
+          )}
+        </div>
 
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          style={{
+            padding: '10px',
+            fontSize: '16px',
+            backgroundColor: isSubmitting ? '#ccc' : '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: isSubmitting ? 'not-allowed' : 'pointer'
+          }}
+        >
+          {isSubmitting ? 'Logging in...' : 'Login'}
+        </button>
+      </form>
+
+      <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
+        <h4>For Testing (No Backend Yet):</h4>
+        <p>Use any name and password to test the UI flow.</p>
+        <p style={{ fontSize: '12px', color: '#666' }}>
+          (We'll add mock login next)
+        </p>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default LOGIN;

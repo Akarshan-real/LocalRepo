@@ -2,20 +2,20 @@ import { createBrowserRouter } from "react-router-dom";
 //Pages
 import App from "../App";
 import AuthorizedPage from "../components/AuthorizedPage";
+import ProtectedRoute from "../components/ProtectedRoute";
 import LOGIN from "../components/LOGIN";
-import Signup from "../components/SIGNUP";
 
 export const router = createBrowserRouter([
     {
-        path : '/authorized' , element : <AuthorizedPage />
+        path : '/authorized' , element : (
+            <ProtectedRoute>
+                <AuthorizedPage />
+            </ProtectedRoute>
+        )
     }
     ,
     {
         path : '/login' , element : <LOGIN />
-    }
-    ,
-    {
-        path : '/signup' , element : <Signup />
     }
     ,
     {
