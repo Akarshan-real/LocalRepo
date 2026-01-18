@@ -3,10 +3,10 @@ import Cookies from "js-cookie";
 const TOKEN_NAME = 'auth_token';
 
 export const cookieStuff = {
-    setToken: (token: string): void => { 
+    setToken: (token: string): void => {
         Cookies.set(TOKEN_NAME, token, {
             expires: 7,
-            secure: window.location.protocol === 'https:', 
+            secure: window.location.protocol === 'https:',
             sameSite: 'Lax',
             path: '/'
         })
@@ -17,6 +17,8 @@ export const cookieStuff = {
     }
     ,
     removeToken: (): void => {
-        Cookies.remove(TOKEN_NAME, { path: '/' }); 
+        Cookies.remove(TOKEN_NAME, {
+            path: '/'
+        });
     }
 }
