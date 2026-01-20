@@ -12,7 +12,6 @@ pnpm-debug.log*
 # ========================
 dist/
 build/
-*.js
 *.js.map
 *.d.ts
 
