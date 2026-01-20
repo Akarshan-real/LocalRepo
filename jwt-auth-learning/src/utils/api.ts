@@ -1,9 +1,150 @@
 import { cookieStuff } from "./cookies";
-import axios, {type AxiosRequestConfig,type AxiosResponse } from "axios";
+import axios, { AxiosError, type InternalAxiosRequestConfig, type AxiosResponse, type AxiosRequestConfig } from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/bomboclat';
 
-const getConfig = (customConfig: AxiosRequestConfig = {}): AxiosRequestConfig => {
+// Access Token Management
+let accessToken: string | null = null;
+
+export const AT = {
+    setAccessToken: (token: string): void => {
+        accessToken = token;
+    },
+    getAccessToken: (): string | null => accessToken,
+    clearAccessToken: (): void => {
+        accessToken = null;
+    }
+};
+
+// Axios Instance
+const axiosInstance = axios.create({
+    baseURL: API_URL,
+    withCredentials: true,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
+
+// Refresh token management
+let isRefreshing: boolean = false;
+let failedQueue: Array<{
+    resolve: (value?: any) => void;
+    reject: (value?: unknown) => void;
+}> = [];
+
+const processQueue = (error: AxiosError | null, token: string | null = null) => {
+    failedQueue.forEach(promise => {
+        if (error) {
+            promise.reject(error);
+        }
+        else {
+            promise.resolve(token);
+        }
+    });
+    failedQueue = [];
+};
+
+// Request Interceptors ==================== Runs after every request
+axiosInstance.interceptors.request.use(
+    (config: InternalAxiosRequestConfig) => {
+        if (accessToken && config.headers) {
+            config.headers.Authorization = `Bearer ${accessToken}`;
+        };
+
+        console.log(`${config.method?.toUpperCase()} ${config.url}`);
+        return config;
+    }
+    ,
+    (error: AxiosError) => {
+        console.log(`Error -> ${error}`);
+        return Promise.reject(error);
+    }
+);
+
+// Response Interceptors =================== Runs after every response
+axiosInstance.interceptors.response.use(
+    (response: AxiosResponse) => {
+        console.log(`${response.config.method?.toUpperCase()} ${response.config.url}`);
+        return response;
+    }
+    ,
+    async (error: AxiosError) => {
+        const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+
+        console.log(`Response Error : ${error.response?.status} , ${error.message}`);
+
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            // If refresh endpoint itself failed, logout
+            if (originalRequest.url === '/refresh') {
+                console.log(`Refresh token expired`);
+                AT.clearAccessToken();
+                window.location.href = '/login';
+                return Promise.reject(error);
+            };
+            // If already refreshing, queue this request
+            if (isRefreshing) {
+                try {
+                    const token = await new Promise<string>((resolve, reject) => {
+                        failedQueue.push({ resolve, reject })
+                    });
+                    if (originalRequest.headers) {
+                        originalRequest.headers.Authorization = `Bearer ${token}`;
+                    }
+                    return axiosInstance(originalRequest);
+
+                } catch (err) {
+                    return Promise.reject(err);
+                };
+            };
+            originalRequest._retry = true;
+            isRefreshing = true;
+            try {
+                console.log(`Access Token expired - Refreshing...`);
+                const response = await axiosInstance.post('/refresh');
+                const newAccessToken = response.data.accessToken;
+
+                AT.setAccessToken(newAccessToken);
+                console.log(`Token refresh successful`);
+
+                processQueue(null, newAccessToken);
+
+                if (originalRequest.headers) {
+                    originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                }
+
+                return axiosInstance(originalRequest);
+            } catch (refreshError) {
+                console.log(`Refresh failed - logging out`);
+                processQueue(refreshError as AxiosError, null);
+                AT.clearAccessToken();
+                window.location.href = '/login';
+                return Promise.reject(refreshError);
+            } finally {
+                isRefreshing = false;
+            }
+        }
+        if (error.response?.status === 403) {
+            console.log(`No permission lil bro`);
+        }
+        if (error.response?.status === 500) {
+            console.log(`Server Error`);
+        }
+        return Promise.reject(error);
+    }
+);
+
+export const api = {
+    get: (endPoint: string) => axiosInstance.get(endPoint),
+    post: (endPoint: string, data?: unknown) => axiosInstance.post(endPoint, data),
+    put: (endPoint: string, data?: unknown) => axiosInstance.put(endPoint, data),
+    delete: (endPoint: string) => axiosInstance.delete(endPoint)
+};
+
+// Normal way without interceptors ====================================================================================================
+// Ignore code below
+// ====================================================================================================================================
+
+function getConfig(customConfig: AxiosRequestConfig = {}): AxiosRequestConfig {
     const token = cookieStuff.getToken();
 
     const config: AxiosRequestConfig = {
@@ -24,7 +165,7 @@ const getConfig = (customConfig: AxiosRequestConfig = {}): AxiosRequestConfig =>
     };
 
     return config;
-};
+}
 
 const handleApiError = (error: any) => {
     if (error.response?.status === 401) {
@@ -36,7 +177,7 @@ const handleApiError = (error: any) => {
     throw error;
 };
 
-export const api = {
+export const api_ = {
     get: async (endPoint: string, config?: AxiosRequestConfig): Promise<AxiosResponse> => {
         try {
             const res = await axios.get(endPoint, getConfig(config));
