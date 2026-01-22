@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/bomboclat
 // Access Token Management
 let accessToken: string | null = null;
 
-export const AT = {
+export const atm = { // access token manager
     setAccessToken: (token: string): void => {
         accessToken = token;
     },
@@ -29,7 +29,7 @@ const axiosInstance = axios.create({
 let isRefreshing: boolean = false;
 let failedQueue: Array<{
     resolve: (value?: any) => void;
-    reject: (value?: unknown) => void;
+    reject: (value?: any) => void;
 }> = [];
 
 const processQueue = (error: AxiosError | null, token: string | null = null) => {
@@ -77,21 +77,21 @@ axiosInstance.interceptors.response.use(
             // If refresh endpoint itself failed, logout
             if (originalRequest.url === '/refresh') {
                 console.log(`Refresh token expired`);
-                AT.clearAccessToken();
+                atm.clearAccessToken();
                 window.location.href = '/login';
                 return Promise.reject(error);
             };
-            // If already refreshing, queue this request
+            // If already refreshing, queue this request 
             if (isRefreshing) {
                 try {
                     const token = await new Promise<string>((resolve, reject) => {
-                        failedQueue.push({ resolve, reject })
+                        failedQueue.push({ resolve, reject });
                     });
                     if (originalRequest.headers) {
                         originalRequest.headers.Authorization = `Bearer ${token}`;
-                    }
+                    };
                     return axiosInstance(originalRequest);
-
+                    
                 } catch (err) {
                     return Promise.reject(err);
                 };
@@ -103,7 +103,7 @@ axiosInstance.interceptors.response.use(
                 const response = await axiosInstance.post('/refresh');
                 const newAccessToken = response.data.accessToken;
 
-                AT.setAccessToken(newAccessToken);
+                atm.setAccessToken(newAccessToken);
                 console.log(`Token refresh successful`);
 
                 processQueue(null, newAccessToken);
@@ -116,7 +116,7 @@ axiosInstance.interceptors.response.use(
             } catch (refreshError) {
                 console.log(`Refresh failed - logging out`);
                 processQueue(refreshError as AxiosError, null);
-                AT.clearAccessToken();
+                atm.clearAccessToken();
                 window.location.href = '/login';
                 return Promise.reject(refreshError);
             } finally {
