@@ -143,7 +143,7 @@ export const api = {
 // Normal way without interceptors ====================================================================================================
 // Ignore code below
 // ====================================================================================================================================
-
+/*
 function getConfig(customConfig: AxiosRequestConfig = {}): AxiosRequestConfig {
     const token = cookieStuff.getToken();
 
@@ -218,6 +218,7 @@ export const api_ = {
         }
     }
 };
+*/
 
 /*
 export const apiCall = async (endPoint: string, options: RequestInit = {}): Promise<Response> => {
