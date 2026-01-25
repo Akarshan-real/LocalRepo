@@ -1,5 +1,8 @@
+// import axios, { AxiosError, type InternalAxiosRequestConfig, type AxiosResponse, type AxiosRequestConfig } from "axios";
+
 import { cookieStuff } from "./cookies";
-import axios, { AxiosError, type InternalAxiosRequestConfig, type AxiosResponse, type AxiosRequestConfig } from "axios";
+import axios , { AxiosError, type InternalAxiosRequestConfig, type AxiosResponse }  from "axios";
+
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/bomboclat';
 
@@ -24,21 +27,21 @@ const axiosInstance = axios.create({
         'Content-Type': 'application/json',
     },
 });
-
+    
 // Refresh token management
 let isRefreshing: boolean = false;
 let failedQueue: Array<{
-    resolve: (value?: any) => void;
+    resolve: (value?: any) => void,
     reject: (value?: any) => void;
 }> = [];
 
 const processQueue = (error: AxiosError | null, token: string | null = null) => {
-    failedQueue.forEach(promise => {
+    failedQueue.forEach(({resolve , reject}) => {
         if (error) {
-            promise.reject(error);
+            reject(error);
         }
         else {
-            promise.resolve(token);
+            resolve(token);
         }
     });
     failedQueue = [];
