@@ -12,7 +12,7 @@ declare global {
 
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // `Bearer ${token}`
+    const token = authHeader && authHeader.split(' ')[authHeader.lenght-1]; // `Bearer ${token}`
 
     if (!token) {
         return res.status(401).json({ message: 'Access token needed' });
@@ -21,7 +21,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     try {
         const decoded = verifyAccessToken(token);
         req.user = decoded;
-        console.log(`✅ Token verified for user:, ${decoded.name}`);
+        console.log(`✅ Token verified for user :, ${decoded.name}`);
         next();
     } catch (error) {
         console.log(`Error invalid token ${error}`);
