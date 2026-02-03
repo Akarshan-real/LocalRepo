@@ -54,6 +54,7 @@ export const POST = async (request: Request) => {
                 isAcceptingMessage: true,
                 messages: []
             });
+            console.log(newUser);
 
             await newUser.save();
         }
