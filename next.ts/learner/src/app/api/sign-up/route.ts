@@ -9,7 +9,7 @@ export const POST = async (request: Request) => {
     try {
         const { username, email, password } = await request.json();
         const existingUserVerifiedByUsername = await UserModel.findOne({
-            username,
+            username : username,
             isVerified: true
         });
 
@@ -32,7 +32,7 @@ export const POST = async (request: Request) => {
                 }, { status: 400 });
             }
             else {
-                const hashedPassword = await bcrypt.hash(password,10);
+                const hashedPassword = await bcrypt.hash(password, 10);
                 existingUserByEmail.password = hashedPassword;
                 existingUserByEmail.verifyCode = verifyCode;
                 existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000);
@@ -54,6 +54,7 @@ export const POST = async (request: Request) => {
                 isAcceptingMessage: true,
                 messages: []
             });
+            console.log(newUser);
 
             await newUser.save();
         }
@@ -86,4 +87,4 @@ export const POST = async (request: Request) => {
             }
         );
     };
-}
+};

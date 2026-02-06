@@ -13,7 +13,7 @@ const MessageSchema: Schema<Message> = new Schema({
     createdAt: {
         type: Date,
         required: true,
-        default: Date.now()
+        default: Date.now
     }
 });
 
@@ -40,7 +40,7 @@ const UserSchema: Schema<User> = new Schema({
         required: [true, 'Email is required'],
         trim: true,
         unique: true,
-        match: [/^([A-Z|a-z|0-9](\.|_){0,1})+[A-Z|a-z|0-9]\@([A-Z|a-z|0-9])+((\.){0,1}[A-Z|a-z|0-9]){2}\.[a-z]{2,3}$/gm, 'Please use a valid email address']
+        match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please use a valid email address']
     },
     password: {
         type: String,
@@ -67,6 +67,6 @@ const UserSchema: Schema<User> = new Schema({
     messages : [MessageSchema]
 });
 
-const UserModel = (mongoose.models.User as mongoose.Model<User>) || mongoose.model<User>("User",UserSchema);
+const UserModel = mongoose.models.Users || mongoose.model<User>("Users",UserSchema);
 
 export default UserModel;
