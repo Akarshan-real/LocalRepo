@@ -36,6 +36,7 @@ export const GET = async (request: Request) => {
         }, { status: 200 });
     }
     catch (error) {
+        console.log("An unexpected error occurred: ",error);
         return Response_(false,"Error in fetching messages",500);
     }
 }
