@@ -14,7 +14,7 @@ async function dbConnect(): Promise<void> {
     };
 
     try {
-        const db = await mongoose.connect((process.env.MONGODB_URI || '')  as string , {});
+        const db = await mongoose.connect((process.env.MONGODB_URI || 'mongodb://localhost:27017/')  as string , {});
 
         // console.log(db);
         

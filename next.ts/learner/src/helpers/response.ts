@@ -22,6 +22,7 @@ export const Response_ =
             messageSchema.parse(message);
             statusNumberSchema.parse(status);
         } catch (error) {
+            console.log('Error while responding');
             throw new Error(`${error}`);
         }
 
