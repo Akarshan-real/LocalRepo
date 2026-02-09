@@ -18,12 +18,16 @@ export const Response_ =
         status: z.infer<typeof statusNumberSchema>,
         data?: unknown
     ) => {
-        messageSchema.parse(message);
-        statusNumberSchema.parse(status);
+        try {
+            messageSchema.parse(message);
+            statusNumberSchema.parse(status);
+        } catch (error) {
+            throw new Error(`${error}`);
+        }
 
         return Response.json({
             success: success,
             message: message,
-            data : data
+            data: data
         }, { status: status })
     };
