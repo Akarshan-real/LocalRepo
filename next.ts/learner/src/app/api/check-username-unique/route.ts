@@ -8,14 +8,6 @@ export const UserNameQuerySchema = z.object({
 });
 
 export async function GET(request: Request) {
-    if (request.method !== 'GET') {
-        return Response.json({
-            success: false,
-            message: 'Only GET method allowed'
-        }, { status: 405 });
-    };
-    //Not needed tho
-
     await dbConnect();
 
     try {
@@ -25,11 +17,9 @@ export async function GET(request: Request) {
         const queryParam = {
             username: searchParams.get("username")
         };
-        console.log(queryParam);
         
         // validate with zod
         const results = UserNameQuerySchema.safeParse(queryParam);
-        console.log('results : ', results);
 
         if (!results.success) {
             const usernameErrors = results.error.format().username?._errors || [];
@@ -42,7 +32,7 @@ export async function GET(request: Request) {
         const { username } = results.data;
         console.log('Username :', username);
 
-        const existingVerifiedUser = await UserModel.findOne({ username, isVerified: true });
+        const existingVerifiedUser = await UserModel.findOne({ username : username, isVerified: true });
         console.log('existingVerifiedUser :', existingVerifiedUser);
 
         if (existingVerifiedUser) {

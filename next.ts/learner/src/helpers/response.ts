@@ -3,28 +3,28 @@ import z from "zod";
 export const statusNumberSchema = z
     .number()
     .int()
-    .min(100, 'Status code must be 3 digits')
-    .max(599, "Status code must be 3 digits");
+    .min(100, 'Status code must be a valid HTTP status')
+    .max(599, 'Status code must be a valid HTTP status');
 
 export const messageSchema = z
     .string()
     .trim()
     .min(1, "Message cannot be empty");
 
-export const Response_ =
-    (
+export const responseSchema = z.object({
+    success: z.boolean(),
+    message: messageSchema,
+    status: statusNumberSchema,
+    data: z.unknown().optional(),
+})
+
+export const Response_ = (
         success: boolean,
-        message: z.infer<typeof messageSchema>,
-        status: z.infer<typeof statusNumberSchema>,
+        message: string /* || z.infer<typeof messageSchema> */,
+        status: number /* || z.infer<typeof statusNumberSchema> */,
         data?: unknown
     ) => {
-        try {
-            messageSchema.parse(message);
-            statusNumberSchema.parse(status);
-        } catch (error) {
-            console.log('Error while responding');
-            throw new Error(`${error}`);
-        }
+        responseSchema.parse({ success, message, status, data });
 
         return Response.json({
             success: success,
