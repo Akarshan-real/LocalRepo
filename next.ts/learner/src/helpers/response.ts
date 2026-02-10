@@ -9,7 +9,7 @@ export const statusNumberSchema = z
 export const messageSchema = z
     .string()
     .trim()
-    .min(1, "Message cannot be empty");
+    .min(5, "At least write 'Error'");
 
 export const responseSchema = z.object({
     success: z.boolean(),
