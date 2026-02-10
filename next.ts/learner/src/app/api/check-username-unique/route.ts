@@ -12,7 +12,7 @@ export async function GET(request: Request) {
 
     try {
         const { searchParams } = new URL(request.url);
-        console.log('searchParams : ', searchParams);
+        // console.log('searchParams : ', searchParams);
 
         const queryParam = {
             username: searchParams.get("username")
@@ -20,6 +20,8 @@ export async function GET(request: Request) {
         
         // validate with zod
         const results = UserNameQuerySchema.safeParse(queryParam);
+
+        console.log(queryParam,"<-queryParam , results-> ",results);
 
         if (!results.success) {
             const usernameErrors = results.error.format().username?._errors || [];
@@ -30,9 +32,8 @@ export async function GET(request: Request) {
         };
 
         const { username } = results.data;
-        console.log('Username :', username);
 
-        const existingVerifiedUser = await UserModel.findOne({ username : username, isVerified: true });
+        const existingVerifiedUser = await UserModel.findOne({ username : username , isVerified : true});
         console.log('existingVerifiedUser :', existingVerifiedUser);
 
         if (existingVerifiedUser) {
