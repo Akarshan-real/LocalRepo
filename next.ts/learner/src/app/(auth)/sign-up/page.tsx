@@ -13,13 +13,14 @@ import { ApiResponse } from "@/types/apiResponse";
 import { Form, FormField, FormControl, FormMessage, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { CircleFadingArrowUpIcon, Loader2 } from "lucide-react";
 
 const SignUp = () => {
   const [username, setUsername] = useState('');
   const [userNameMessage, setUserNameMessage] = useState('');
-  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCheckingUsername, setIsCheckingUsername] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const debounced = useDebounceCallback(setUsername, 400);
 
@@ -134,6 +135,7 @@ const SignUp = () => {
                     <FormControl>
                       <Input id="input-field-email" type="email" placeholder="Email" {...field} />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               >
@@ -146,9 +148,15 @@ const SignUp = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel htmlFor="input-field-password">Password</FormLabel>
-                    <FormControl>
-                      <Input id="input-field-password" autoComplete="off" type="password" placeholder="Password" {...field} />
-                    </FormControl>
+                    <div className="relative">
+                      <FormControl>
+                        <Input id="input-field-password" autoComplete="off" type={showPassword ? "text" : "password"} placeholder="Password" {...field} />
+                      </FormControl>
+                      <Button className="cursor-pointer absolute right-0 hover:bg-slate-200 transition-colors duration-250 ease-in-out" type="button" onClick={() => { setShowPassword(prev => !prev) }} variant="outline" size="icon">
+                        <CircleFadingArrowUpIcon />
+                      </Button>
+                    </div>
+                    <FormMessage />
                   </FormItem>
                 )}
               >
@@ -161,7 +169,7 @@ const SignUp = () => {
                   isCheckingUsername ||
                   !form.formState.isValid ||
                   !(userNameMessage === "Username is unique")
-                  }>
+                }>
                 {isSubmitting ?
                   (<>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait

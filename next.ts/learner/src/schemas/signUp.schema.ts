@@ -4,7 +4,7 @@ export const usernameValidation = z
     .string()
     .min(2,'At-least 2 char')
     .max(16,'Maximum 16 char')
-    .regex(/^[a-zA-Z0-9_]{3,16}$/,'Username must not contain special character');
+    .regex(/^[a-zA-Z0-9_]{2,16}$/,'Username must not contain special character');
 
 export const passwordValidation = z
     .string()

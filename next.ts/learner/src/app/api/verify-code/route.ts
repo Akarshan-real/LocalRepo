@@ -13,7 +13,7 @@ export async function POST(request: Request) {
         const user = await UserModel.findOne({ username: decodedUsername });
 
         if (!user) {
-            return Response_(false, 'User not found', 500);
+            return Response_(false, "User not found", 500);
         }
 
         const isCodeValid = user.verifyCode === verifyCode;
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
         }
     }
     catch (error) {
-        console.error("Error verifying user", error);
+        console.error("Error verifying user: ", error);
         return Response_(false, "Error verifying user", 500);
     }
 }
