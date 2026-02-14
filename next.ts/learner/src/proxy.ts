@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { getToken } from "next-auth/jwt"
+import { NextRequest, NextResponse } from 'next/server';
+import { getToken } from "next-auth/jwt";
 
 // export { default } from "next-auth/middleware"
 
-export async function proxy(request: NextRequest) {
+export const proxy = async (request: NextRequest) => {
 
     const token = await getToken({ req: request });
     const url = request.nextUrl;
@@ -24,7 +24,7 @@ export async function proxy(request: NextRequest) {
 
     /* return NextResponse.redirect(new URL('/home', request.url)); */
     return NextResponse.next()
-}
+};
 
 // See "Matching Paths" below to learn more
 export const config = {
@@ -36,4 +36,4 @@ export const config = {
         '/dashboard/:path*',
         '/verify/:path*'
     ]
-}
+};
