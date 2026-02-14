@@ -18,7 +18,7 @@ build/
 # ========================
 # Environment Variables
 # ========================
-# .env
+.env
 # .env.local
 # .env.*.local
 
@@ -51,3 +51,4 @@ coverage/
 
 
 *.ini
+.idea

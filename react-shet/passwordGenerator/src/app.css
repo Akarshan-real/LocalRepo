@@ -1,0 +1,9 @@
+@import "tailwindcss";
+*{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.mid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
