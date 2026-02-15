@@ -1,0 +1,7 @@
+@custom-variant dark (&:where(.dark, .dark *));
+@import "tailwindcss";
+.mid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
