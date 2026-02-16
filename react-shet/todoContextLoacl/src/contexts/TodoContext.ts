@@ -1,31 +1,25 @@
 import { useContext, createContext } from "react";
 
-type Todo = {
-    id : number | Date,
+export type TodoType = {
+    id : number ,
     todo : string , 
     completed : boolean
 }
 
 type TodoContextType = {
-  todos: Todo[];
+  todos: TodoType[];
   addTodo: (todo: string) => void;
   updateTodo: (id: number, todo: string) => void;
   deleteTodo: (id: number) => void;
   toggleComplete: (id: number) => void;
 };
 
-export const TodoContext = createContext({
-    todos: [
-        {
-            id: 1,
-            todo: "Todo msg",
-            completed : false
-        }
-    ],
-    addTodo : (todo : any) => {},
-    updateTodo : (id : number ,todo : string) => {},
-    deleteTodo : (id : number) => {},
-    toggleComplete : (id : number) => {}
+export const TodoContext = createContext<TodoContextType>({
+    todos: [],
+    addTodo : () => {},
+    updateTodo : () => {},
+    deleteTodo : () => {},
+    toggleComplete : () => {}
 });
 
 export const useTodo = () => (useContext(TodoContext));
