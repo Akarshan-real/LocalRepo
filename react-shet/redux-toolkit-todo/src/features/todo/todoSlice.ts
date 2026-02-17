@@ -6,7 +6,7 @@ export type TodoType = {
 };
 
 const initialState = {
-    todos: [{ id: "1", text: "Hello World" }]
+    todos: [{ id: "1", text: "Hello World" }, { id: "2", text: "Hello Redux Toolkit" }, { id: "3", text: "Hello React" }]
 };
 
 export const todoSlice = createSlice({
