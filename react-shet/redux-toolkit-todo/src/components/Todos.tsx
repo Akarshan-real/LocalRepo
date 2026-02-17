@@ -5,23 +5,17 @@ import { useEffect, useState } from 'react';
 function Todos() {
     const todos = useSelector((state: any) => state.todos);
     const [editingId, setEditingId] = useState<string | null>(null);
+    const [editText, setEditText] = useState<string>("");
     const dispatch = useDispatch();
 
     useEffect(() => {
         console.log(editingId);
     }, [editingId]);
 
-    const formSubmitHandler = (e: any, todo : TodoType) => {
+    const formSubmitHandler = (e: any, todo: TodoType) => {
         e.preventDefault();
 
-        const form = e.currentTarget as HTMLFormElement;
-        const input = form.elements.namedItem("updateInput") as HTMLInputElement;
-
-        dispatch(updateTodo({
-            id: todo.id,
-            text: input.value
-        }));
-
+        dispatch(updateTodo({ id: todo.id, text: editText }));
         setEditingId(null);
     };
 
@@ -37,35 +31,40 @@ function Todos() {
                     >
                         <form
                             className='flex-1 h-full flex justify-between'
-                            onSubmit={(e) => {formSubmitHandler(e, todo)}}>
+                            onSubmit={(e) => { formSubmitHandler(e, todo) }}>
                             {
                                 editingId === todo.id ? (
-                                    <input autoFocus className='text-white focus:outline-none' type="text" name='updateInput' placeholder='Update your todo then press save' defaultValue={todo.text} />
+                                    <input
+                                        autoFocus
+                                        className='text-white focus:outline-none'
+                                        type="text"
+                                        name='updateInput'
+                                        placeholder='Update your todo then press save'
+                                        defaultValue={todo.text}
+                                        onChange={(e) => setEditText(e.target.value)}
+                                    />
                                 ) : (
                                     <div className='text-white mid'>{todo.text}</div>
                                 )
                             }
 
-                            {editingId === todo.id ? (
+                            {editingId === todo.id && (
                                 <button
                                     type="submit"
                                     className='text-white rounded-sm py-1 px-4 bg-orange-400 cursor-pointer hover:bg-orange-500 duration-150 transition-colors ease-in-out'
                                 >
                                     Save
                                 </button>
-                            ) : (
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setEditingId(todo.id);
-                                    }}
-                                    className='text-white rounded-sm py-1 px-4 bg-orange-400 cursor-pointer hover:bg-orange-500 duration-150 transition-colors ease-in-out'
-                                >
-                                    Edit
-                                </button>
                             )}
 
                         </form>
+                        {!editingId && <button
+                            type="button"
+                            onClick={() => { setEditingId(todo.id); setEditText(todo.text); }}
+                            className='text-white rounded-sm py-1 px-4 bg-orange-400 cursor-pointer hover:bg-orange-500 duration-150 transition-colors ease-in-out'
+                        >
+                            Edit
+                        </button>}
                         {/* Delete Button */}
                         <button
                             onClick={() => dispatch(removeTodo({ id: todo.id }))}
