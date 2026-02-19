@@ -1,4 +1,4 @@
-import envs from '../config/config';
+import secret from '../config/config';
 import { Client, Account, ID } from "appwrite";
 
 export class AuthService {
@@ -7,8 +7,8 @@ export class AuthService {
 
     constructor() {
         this.client
-            .setEndpoint(envs.appWriteUrl)
-            .setProject(envs.appWriteProjectId);
+            .setEndpoint(secret.appWriteUrl)
+            .setProject(secret.appWriteProjectId);
         this.account = new Account(this.client);
     };
 

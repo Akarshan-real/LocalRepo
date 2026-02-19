@@ -1,3 +1,13 @@
+import type { ReactNode } from "react";
+
+type ButtonType = {
+    children ?: ReactNode | string,
+    type ?: "button" | "submit" | "reset",
+    bgColor ?: string,
+    textColor ?: string,
+    className ?: string,
+};
+
 const Button = ({
     children,
     type = "button",
@@ -5,7 +15,7 @@ const Button = ({
     textColor = "text-white",
     className = "",
     ...props
-}) => {
+} : ButtonType) => {
     return (
         <button className={`px-4 py-2 rounded-lg  ${className} ${textColor} ${bgColor}`} {...props}>
             {children}
@@ -13,4 +23,4 @@ const Button = ({
     )
 };
 
-export default Button
+export default Button;

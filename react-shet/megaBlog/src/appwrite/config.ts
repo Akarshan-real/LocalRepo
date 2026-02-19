@@ -1,13 +1,6 @@
 import secret from '../config/config';
 import { Client, ID, Query, Storage, TablesDB } from "appwrite";
-
-export type TableType = {
-    title: string,
-    content: string,
-    featuredImage: unknown,
-    status: string,
-    userId: string
-};
+import { type PostType } from '../Types/Post.type'
 
 export class Service {
     client = new Client();
@@ -22,9 +15,9 @@ export class Service {
         this.storage = new Storage(this.client);
     };
 
-    createPost = async ({ title, slug, content, featuredImage, status, userId }: TableType & { slug: string }) => {
+    createPost = async ({ title, slug, content, featuredImage, status, userId }: PostType & { slug: string }) => {
         try {
-            await this.table.createRow({
+            return await this.table.createRow({
                 databaseId: secret.appWriteDataBaseId,
                 tableId: secret.appWriteTableId,
                 rowId: slug,
@@ -38,11 +31,12 @@ export class Service {
             });
         }
         catch (error) {
-            throw error;
+            console.log("Appwrite error :: ",error);
+            return null;
         }
     };
 
-    updatePost = async (slug: string, { title, content, featuredImage, status }: Omit<TableType, "userId">) => {
+    updatePost = async (slug: string, { title, content, featuredImage, status }: Omit<PostType, "userId">) => {
         try {
             return await this.table.updateRow({
                 databaseId: secret.appWriteDataBaseId,
@@ -144,15 +138,14 @@ export class Service {
         }
     };
 
-    getFilePreview = async (fileId : string) => {
+    getFilePreview = (fileId : string) => {
         try {
-            return await this.storage.getFilePreview({
+            return this.storage.getFilePreview({
                 bucketId : secret.appWriteBucketId,
                 fileId : fileId
             });
         } catch (error) {
             console.log("Appwrite error :: ", error);
-            return false;
         };
     };
 };
