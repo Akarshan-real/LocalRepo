@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import './App.css'
 import authService from './appwrite/auth';
 import { login, logout } from './store/authSlice';
 import { Footer, Header } from './components';
-import { Outlet } from 'react-router-dom';
 
 function App() {
   const dispatch = useDispatch();
@@ -22,8 +20,8 @@ function App() {
       }
       finally {
         setLoading(false);
-      }
-    }
+      };
+    };
 
     checkUser();
   }, []);

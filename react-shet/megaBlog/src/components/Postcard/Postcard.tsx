@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import newService from '../../appwrite/config';
 import {type AppWriteTableType } from '../../Types/Table.type';
 
-const Postcard = ({ $id, title, featuredImage } : Pick<AppWriteTableType,"$id" | "title" | "featuredImage">) => {
+const PostCard = ({ $id, title, featuredImage } : Pick<AppWriteTableType,"$id" | "title" | "featuredImage">) => {
     return (
         <Link to={`/post/${$id}`}>
             <div className='w-full bg-gray-100 rounded-xl p-4'>
@@ -15,4 +15,4 @@ const Postcard = ({ $id, title, featuredImage } : Pick<AppWriteTableType,"$id" |
     )
 }
 
-export default Postcard
+export default PostCard

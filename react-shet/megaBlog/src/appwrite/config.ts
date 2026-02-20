@@ -1,6 +1,7 @@
 import secret from '../config/config';
-import { Client, ID, Query, Storage, TablesDB } from "appwrite";
+import { Client, ID, Query, Storage, TablesDB, type Models } from "appwrite";
 import { type PostType } from '../Types/Post.type'
+import type { AppWriteExtendedTableType } from '../Types/Extended.table.type';
 
 export class Service {
     client = new Client();
@@ -31,7 +32,7 @@ export class Service {
             });
         }
         catch (error) {
-            console.log("Appwrite error :: ",error);
+            console.log("Appwrite error :: ", error);
             return null;
         }
     };
@@ -69,9 +70,9 @@ export class Service {
         }
     };
 
-    getPost = async (slug: string) => {
+    getPost = async (slug: string) : Promise<AppWriteExtendedTableType | null> => {
         try {
-            return await this.table.getRow({
+            return await this.table.getRow<AppWriteExtendedTableType>({
                 databaseId: secret.appWriteDataBaseId,
                 tableId: secret.appWriteTableId,
                 rowId: slug
@@ -79,25 +80,25 @@ export class Service {
         }
         catch (error) {
             console.log("Appwrite error :: ", error);
-            return false;
+            return null;
         }
     };
 
-    getPosts = async (queries: string[] = [Query.equal("status", "active")]) => {
+    getPosts = async (queries: string[] = [Query.equal("status", "active")]): Promise<Models.RowList<AppWriteExtendedTableType> | null> => {
         try {
-            return await this.table.listRows({
+            return await this.table.listRows<AppWriteExtendedTableType>({
                 databaseId: secret.appWriteDataBaseId,
                 tableId: secret.appWriteTableId,
                 queries: queries
-            })
+            });
         }
         catch (error) {
             console.log("Appwrite error :: ", error);
-            return false;
+            return null;
         }
     };
 
-    getPostsByStatus = async (status: "active" | "inactive") => {
+    getPostsByStatus = async (status: "active" | "inactive") => { 
         try {
             return await this.table.listRows({
                 databaseId: secret.appWriteDataBaseId,
@@ -138,11 +139,11 @@ export class Service {
         }
     };
 
-    getFilePreview = (fileId : string) => {
+    getFilePreview = (fileId: string) => {
         try {
             return this.storage.getFilePreview({
-                bucketId : secret.appWriteBucketId,
-                fileId : fileId
+                bucketId: secret.appWriteBucketId,
+                fileId: fileId
             });
         } catch (error) {
             console.log("Appwrite error :: ", error);

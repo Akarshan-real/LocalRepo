@@ -14,9 +14,9 @@ type FormType = {
     content: string,
 };
 
-type PostPropType = PostType & { slug: string , $id : string }
+type PostPropType = PostType & { slug: string, $id: string }
 
-const PostForm = ({ post } : { post ?: PostPropType }) => {
+const PostForm = ({ post }: { post?: PostPropType }) => {
     const navigate = useNavigate();
     const userdata = useSelector((state: any) => state.user.userData);
 
@@ -29,7 +29,7 @@ const PostForm = ({ post } : { post ?: PostPropType }) => {
         }
     });
 
-    const submit = async (data : FormType & { image?: FileList }) => {
+    const submit = async (data: FormType & { image?: FileList }) => {
         if (post) {
             const file = data.image[0] ? await newService.uploadFile(data.image[0]) : null;
 
@@ -50,13 +50,13 @@ const PostForm = ({ post } : { post ?: PostPropType }) => {
 
                 if (file) {
                     const fileId = file.$id;
-                    const dbPost = await newService.createPost({ 
+                    const dbPost = await newService.createPost({
                         title: data.title,
                         slug: data.slug,
                         content: data.content,
                         status: data.status,
                         featuredImage: fileId,
-                        userId: userdata.$id 
+                        userId: userdata.$id
                     });
 
                     if (dbPost) {
@@ -78,14 +78,13 @@ const PostForm = ({ post } : { post ?: PostPropType }) => {
         const subscription = watch((value, { name }) => {
             if (name === "title") {
                 setValue("slug", slugTransform(value.title), { shouldValidate: true });
-            }
+            };
         });
 
         return () => {
             subscription.unsubscribe();
-
         };
-    }, [watch, slugTransform, setValue])
+    }, [watch, slugTransform, setValue]);
 
 
     return (

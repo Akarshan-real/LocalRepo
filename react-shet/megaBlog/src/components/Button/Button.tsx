@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode , ButtonHTMLAttributes} from "react";
 
 type ButtonType = {
     children ?: ReactNode | string,
@@ -6,7 +6,7 @@ type ButtonType = {
     bgColor ?: string,
     textColor ?: string,
     className ?: string,
-};
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = ({
     children,
