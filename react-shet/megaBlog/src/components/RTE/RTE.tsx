@@ -1,5 +1,6 @@
 import { Editor } from '@tinymce/tinymce-react';
 import { Controller } from 'react-hook-form';
+import secret from "../../config/config";
 
 type RTEProps = {
     name: string;
@@ -18,8 +19,10 @@ const RTE = ({ name, control, label, defaultValue = "" } : RTEProps) => {
             <Controller
                 name={name || "Content"}
                 control={control}
+                defaultValue={defaultValue}
                 render={({ field: { onChange } }) => (
                     <Editor
+                        apiKey={secret.tinyMceApi}
                         initialValue={defaultValue}
                         init={{
                             initialValues: defaultValue,

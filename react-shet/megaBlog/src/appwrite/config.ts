@@ -76,7 +76,7 @@ export class Service {
                 databaseId: secret.appWriteDataBaseId,
                 tableId: secret.appWriteTableId,
                 rowId: slug
-            })
+            });
         }
         catch (error) {
             console.log("Appwrite error :: ", error);

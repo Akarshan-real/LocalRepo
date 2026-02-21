@@ -9,6 +9,7 @@ export class AuthService {
         this.client
             .setEndpoint(secret.appWriteUrl)
             .setProject(secret.appWriteProjectId);
+
         this.account = new Account(this.client);
     };
 
@@ -51,10 +52,8 @@ export class AuthService {
             return await this.account.get();
         }
         catch (error) {
-            throw error;
+            return null;
         };
-
-        return null;
     };
 };
 

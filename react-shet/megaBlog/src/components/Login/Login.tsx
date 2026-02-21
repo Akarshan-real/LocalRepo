@@ -1,34 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login as authLogin } from "../../store/authSlice";
 import { Button, Input, Logo } from '../index';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import authService from "../../appwrite/auth";
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { type CredentialType } from "../../Types/Credentials.type";
+import { setLoading } from "../../store/uxSlice";
 
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        const hehe = async () => {
+            const userData = await authService.getCurrentUser();
+            if (userData) {
+                dispatch(authLogin(userData));
+                navigate("/");
+            };
+        }
+        hehe();
+    }, []);
+
     const [error, setError] = useState<string>("");
+    const loading = useSelector((state: any) => state.ux.loading);
 
     const { register, handleSubmit } = useForm<CredentialType>();
 
     const login: SubmitHandler<CredentialType> = async (data) => {
         setError("");
+        dispatch(setLoading(true));
         try {
             const session = await authService.login(data);
             if (session) {
                 const userData = await authService.getCurrentUser();
                 if (userData) {
                     dispatch(authLogin(userData));
-                    navigate("/")
+                    navigate("/");
                 }
             }
         }
         catch (error: any) {
             setError(error.message)
+        }
+        finally {
+            dispatch(setLoading(false));
         }
     };
 
@@ -45,11 +62,12 @@ const Login = () => {
                     Don&apos;t have any account?&nbsp;
                     <Link
                         to="/signup"
-                        className="font-medium text-primary transition-all duration-200 hover:underline"
+                        className="font-medium cursor-pointer text-primary transition-all duration-200 hover:underline"
                     >
                         Sign Up
                     </Link>
                 </p>
+
                 {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
                 <form onSubmit={handleSubmit(login)} className="mt-8">
                     <div className="space-y-5">
@@ -77,7 +95,8 @@ const Login = () => {
                         />
                         <Button
                             type="submit"
-                            className="w-full"
+                            className="w-full cursor-pointer"
+                            disabled={loading}
                         >
                             Sign in
                         </Button>

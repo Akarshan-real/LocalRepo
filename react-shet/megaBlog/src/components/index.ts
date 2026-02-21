@@ -12,7 +12,7 @@ import Select from "./Select/Select";
 import Signup from "./Signup/Signup";
 import Login from "./Login/Login";
 import PostForm from "./Post-form/PostForm";
-
+import OverlayLoader from "./Loader/OverlayLoader";
 
 export {
     Header,
@@ -28,5 +28,6 @@ export {
     Select,
     Signup,
     Login,
-    PostForm
+    PostForm,
+    OverlayLoader
 };

@@ -1,9 +1,10 @@
 type AppwriteConfig = {
-    appWriteUrl: string
-    appWriteProjectId: string
-    appWriteDataBaseId: string
-    appWriteBucketId: string
-    appWriteTableId: string
+    appWriteUrl: string,
+    appWriteProjectId: string,
+    appWriteDataBaseId: string,
+    appWriteBucketId: string,
+    appWriteTableId: string,
+    tinyMceApi : string
 };
 
 function getEnv(key: keyof ImportMetaEnv): string {
@@ -19,7 +20,8 @@ const conf: AppwriteConfig = {
   appWriteProjectId: getEnv("VITE_APPWRITE_PROJECT_ID"),
   appWriteDataBaseId: getEnv("VITE_APPWRITE_DATABASE_ID"),
   appWriteBucketId: getEnv("VITE_APPWRITE_BUCKET_ID"),
-  appWriteTableId: getEnv("VITE_APPWRITE_TABLE_ID")
+  appWriteTableId: getEnv("VITE_APPWRITE_TABLE_ID"),
+  tinyMceApi : getEnv("VITE_TINYMCE_API_KEY"),
 };
 
 export default conf;

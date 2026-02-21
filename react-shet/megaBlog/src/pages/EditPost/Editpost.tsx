@@ -3,14 +3,18 @@ import { Container, PostForm } from "../../components/index";
 import newService from '../../appwrite/config';
 import { type AppWriteExtendedTableType } from '../../Types/Extended.table.type';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setLoading } from '../../store/uxSlice';
 
 const Editpost = () => {
     const [post, setPost] = useState<AppWriteExtendedTableType | null>(null);
     const { slug } = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const hehe = async () => {
+            dispatch(setLoading(true));
             if (slug) {
                 const response = await newService.getPost(slug);
 
@@ -20,12 +24,13 @@ const Editpost = () => {
             }
             else {
                 navigate("/");
-            }
+            };
+            dispatch(setLoading(false));
         };
         hehe();
     }, [slug, navigate]);
 
-    const mapPostToForm = (post: AppWriteExtendedTableType): AppWriteExtendedTableType & {slug : string} => {
+    const mapPostToForm = (post: AppWriteExtendedTableType): AppWriteExtendedTableType & { slug: string } => {
         return {
             ...post,
             slug: post.$id,

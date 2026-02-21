@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import authService from "../../appwrite/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../store/authSlice";
@@ -6,17 +6,29 @@ import { useDispatch } from "react-redux";
 import { Button, Input, Logo } from '../index';
 import { useForm } from "react-hook-form";
 import type { SignUpCredentials } from "../../Types/Signup.type";
+import type { Models } from "appwrite";
 
 
 const Signup = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        const hehe = async () => {
+            const userData = await authService.getCurrentUser();
+            if (userData) {
+                dispatch(authLogin(userData));
+                navigate("/");
+            }
+        }
+        hehe();
+    }, []);
+
     const [error, setError] = useState('');
 
     const { register, handleSubmit } = useForm<SignUpCredentials>();
 
-    const create = async (data : SignUpCredentials) => {
+    const create = async (data: SignUpCredentials) => {
         setError("");
         try {
             const response = await authService.createAccount(data);
@@ -45,7 +57,7 @@ const Signup = () => {
                     Already have an account?&nbsp;
                     <Link
                         to="/login"
-                        className="font-medium text-primary transition-all duration-200 hover:underline"
+                        className="font-medium cursor-pointer text-primary transition-all duration-200 hover:underline"
                     >
                         Sign In
                     </Link>
@@ -96,3 +108,7 @@ const Signup = () => {
 }
 
 export default Signup
+function authLogin(userData: Models.User<{ [key: string]: any;[__default]: true; }>): any {
+    throw new Error("Function not implemented.");
+}
+

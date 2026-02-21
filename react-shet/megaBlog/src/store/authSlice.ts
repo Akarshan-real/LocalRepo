@@ -1,14 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { Models } from "appwrite";
 
-const initialState = { status: false, userData: null };
+type AuthState = {
+    status: boolean,
+    userData: Models.User<Models.Preferences> | null;
+};
+
+const initialState: AuthState = {
+    status: false,
+    userData: null
+};
 
 const authSlice = createSlice({
-    name: "Auth",
+    name: "auth",
     initialState: initialState,
     reducers: {
         login: (state, action) => {
             state.status = true;
-            state.userData = action.payload.userData;
+            state.userData = action.payload;
         },
         logout: (state) => {
             state.status = false;

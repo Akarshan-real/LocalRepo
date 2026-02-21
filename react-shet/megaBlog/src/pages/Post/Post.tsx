@@ -3,44 +3,57 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import newService from "../../appwrite/config";
 import { Button, Container } from "../../components/index";
 import parse from "html-react-parser";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { AppWriteExtendedTableType } from "../../Types/Extended.table.type";
+import { setLoading } from "../../store/uxSlice";
 
 export default function Post() {
     const [post, setPost] = useState<AppWriteExtendedTableType | null>(null);
     const { slug } = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const userData = useSelector((state: any) => state.auth.userData);
 
     const isAuthor = post && userData ? post.userId === userData.$id : false;
 
     useEffect(() => {
-        const hehe = async () => {
-            if (slug) {
-                const response = await newService.getPost(slug);
+        try {
+            dispatch(setLoading(true));
+            const hehe = async () => {
+                if (slug) {
+                    const response = await newService.getPost(slug);
 
-                if (response) {
-                    setPost(response);
+                    if (response) {
+                        setPost(response);
+                    }
+                    else {
+                        navigate("/");
+                    }
                 }
                 else {
                     navigate("/");
-                }
-            }
-            else {
-                navigate("/");
+                };
             };
-        };
-        hehe();
+            hehe();
+        } catch (error) {
+            console.log(error);
+        }
+        finally {
+            dispatch(setLoading(false));
+        }
+
     }, [slug, navigate]);
 
     const deletePost = async () => {
         if (post) {
+            dispatch(setLoading(true));
             const status = await newService.deletePost(post.$id);
             if (status) {
                 newService.deleteFile(post.featuredImage);
                 navigate("/");
             };
+            dispatch(setLoading(false));
         };
     };
 
@@ -76,4 +89,4 @@ export default function Post() {
             </Container>
         </div>
     ) : null;
-}
+};

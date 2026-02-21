@@ -3,8 +3,9 @@ import { useForm } from 'react-hook-form';
 import { Button, Input, Select, RTE } from '../index';
 import newService from '../../appwrite/config';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { type PostType } from '../../Types/Post.type';
+import { setLoading } from '../../store/uxSlice';
 
 type FormType = {
     title: string,
@@ -17,10 +18,19 @@ type FormType = {
 type PostPropType = PostType & { slug: string, $id: string }
 
 const PostForm = ({ post }: { post?: PostPropType }) => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const userdata = useSelector((state: any) => state.user.userData);
+    const userdata = useSelector((state: any) => state.auth.userData);
 
-    const { register, handleSubmit, watch, setValue, control, getValues } = useForm<FormType>({
+    const {
+        register,
+        handleSubmit,
+        watch,
+        setValue,
+        control,
+        getValues,
+        formState: { errors }
+    } = useForm<FormType>({
         defaultValues: {
             title: post?.title || '',
             slug: post?.slug || '',
@@ -29,47 +39,59 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
         }
     });
 
-    const submit = async (data: FormType & { image?: FileList }) => {
-        if (post) {
-            const file = data.image[0] ? await newService.uploadFile(data.image[0]) : null;
+    console.log(errors);
 
-            if (file) {
-                await newService.deleteFile(post.featuredImage);
-            };
+    const submit = async (data: Omit<FormType, "image"> & { image?: FileList }) => {
+        dispatch(setLoading(true));
+        console.log("Hi");
+        try {
+            if (post) {
+                console.log("Hi");
+                const file = data.image?.[0] ? await newService.uploadFile(data.image[0]) : null;
+                if (file) {
+                    await newService.deleteFile(post.featuredImage);
+                };
 
-            const dbUpdate = await newService.updatePost(post.$id, {
-                ...data,
-                featuredImage: file ? file.$id : "",
-            });
+                const dbUpdate = await newService.updatePost(post.$id, {
+                    ...data,
+                    featuredImage: file ? file.$id : "",
+                });
 
-            if (dbUpdate) {
-                navigate(`/post/${dbUpdate.$id}`);
+                if (dbUpdate) {
+                    navigate(`/post/${dbUpdate.$id}`);
+                };
             }
             else {
-                const file = data.image[0] ? await newService.uploadFile(data.image[0]) : null;
+                const file = data.image?.[0] ? await newService.uploadFile(data.image[0]) : null;
 
                 if (file) {
                     const fileId = file.$id;
-                    const dbPost = await newService.createPost({
-                        title: data.title,
-                        slug: data.slug,
-                        content: data.content,
-                        status: data.status,
-                        featuredImage: fileId,
-                        userId: userdata.$id
-                    });
-
-                    if (dbPost) {
-                        navigate(`/post/${dbPost.$id}`);
+                    if (userdata) {
+                        const dbPost = await newService.createPost({
+                            title: data.title,
+                            slug: data.slug,
+                            content: data.content,
+                            status: data.status,
+                            featuredImage: fileId,
+                            userId: userdata.$id
+                        });
+                        if (dbPost) {
+                            navigate(`/post/${dbPost.$id}`);
+                        };
                     };
                 };
             };
+        } catch (error) {
+            console.log(error);
+        }
+        finally {
+            dispatch(setLoading(false));
         };
     };
 
     const slugTransform = useCallback((value: unknown): string => {
         if (value && typeof value === 'string') {
-            return value.trim().toLowerCase().replace(/^[a-zA-Z\d\s]+/g, "-").replace(/\s/g, "-");
+            return value.trim().toLowerCase().replace(/\s+/g, "-");
         }
         return "";
     }, []);
@@ -86,7 +108,6 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
         };
     }, [watch, slugTransform, setValue]);
 
-
     return (
         <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
             <div className="w-2/3 px-2">
@@ -100,12 +121,18 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
                     label="Slug :"
                     placeholder="Slug"
                     className="mb-4"
+                    readOnly
                     {...register("slug", { required: true })}
                     onInput={(e) => {
                         setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
                     }}
                 />
-                <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
+                <RTE
+                    label="Content :"
+                    name="content"
+                    control={control}
+                    defaultValue={getValues("content")}
+                />
             </div>
             <div className="w-1/3 px-2">
                 <Input
@@ -136,6 +163,6 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
             </div>
         </form>
     );
-}
+};
 
 export default PostForm
