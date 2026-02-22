@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import authService from "../../appwrite/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../../store/authSlice";
+import { login as authLogin } from "../../store/authSlice";
 import { useDispatch } from "react-redux";
 import { Button, Input, Logo } from '../index';
 import { useForm } from "react-hook-form";
 import type { SignUpCredentials } from "../../Types/Signup.type";
-import type { Models } from "appwrite";
 
 
 const Signup = () => {
@@ -19,8 +18,8 @@ const Signup = () => {
             if (userData) {
                 dispatch(authLogin(userData));
                 navigate("/");
-            }
-        }
+            };
+        };
         hehe();
     }, []);
 
@@ -35,7 +34,7 @@ const Signup = () => {
             if (response) {
                 const userData = await authService.getCurrentUser();
                 if (userData) {
-                    dispatch(login(userData));
+                    dispatch(authLogin(userData));
                     navigate("/");
                 }
             }
@@ -107,8 +106,5 @@ const Signup = () => {
     )
 }
 
-export default Signup
-function authLogin(userData: Models.User<{ [key: string]: any;[__default]: true; }>): any {
-    throw new Error("Function not implemented.");
-}
+export default Signup;
 

@@ -50,7 +50,7 @@ export default function Post() {
             dispatch(setLoading(true));
             const status = await newService.deletePost(post.$id);
             if (status) {
-                newService.deleteFile(post.featuredImage);
+                await newService.deleteFile(post.featuredImage);
                 navigate("/");
             };
             dispatch(setLoading(false));
@@ -62,7 +62,7 @@ export default function Post() {
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
                     <img
-                        src={newService.getFilePreview(post.featuredImage)}
+                        src={newService.getFileView(post.featuredImage)}
                         alt={post.title}
                         className="rounded-xl"
                     />

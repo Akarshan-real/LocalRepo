@@ -37,7 +37,7 @@ export class Service {
         }
     };
 
-    updatePost = async (slug: string, { title, content, featuredImage, status }: Omit<PostType, "userId">) => {
+    updatePost = async (slug: string, { title, content, featuredImage, status }: Omit<PostType, "userId" | "featuredImage" > & { featuredImage ?: string}) => {
         try {
             return await this.table.updateRow({
                 databaseId: secret.appWriteDataBaseId,
@@ -98,7 +98,7 @@ export class Service {
         }
     };
 
-    getPostsByStatus = async (status: "active" | "inactive") => { 
+    getPostsByStatus = async (status: "active" | "inactive" = "active") => { 
         try {
             return await this.table.listRows({
                 databaseId: secret.appWriteDataBaseId,
@@ -139,9 +139,9 @@ export class Service {
         }
     };
 
-    getFilePreview = (fileId: string) => {
+    getFileView = (fileId: string) => {
         try {
-            return this.storage.getFilePreview({
+            return this.storage.getFileView({
                 bucketId: secret.appWriteBucketId,
                 fileId: fileId
             });

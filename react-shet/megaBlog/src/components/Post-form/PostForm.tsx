@@ -39,30 +39,42 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
         }
     });
 
-    console.log(errors);
+    // console.log(errors);
 
     const submit = async (data: Omit<FormType, "image"> & { image?: FileList }) => {
         dispatch(setLoading(true));
-        console.log("Hi");
         try {
             if (post) {
-                console.log("Hi");
+                console.log("Updating post");
                 const file = data.image?.[0] ? await newService.uploadFile(data.image[0]) : null;
+                console.log("File : ", file);
+
                 if (file) {
                     await newService.deleteFile(post.featuredImage);
-                };
 
-                const dbUpdate = await newService.updatePost(post.$id, {
-                    ...data,
-                    featuredImage: file ? file.$id : "",
-                });
+                    const dbUpdate = await newService.updatePost(post.$id, {
+                        ...data,
+                        featuredImage: file.$id
+                    });
 
-                if (dbUpdate) {
-                    navigate(`/post/${dbUpdate.$id}`);
+                    if (dbUpdate) {
+                        navigate(`/post/${dbUpdate.$id}`);
+                    };
+                }
+                else {
+                    const dbUpdate = await newService.updatePost(post.$id, {
+                        ...data
+                    });
+
+                    if (dbUpdate) {
+                        navigate(`/post/${dbUpdate.$id}`);
+                    };
                 };
             }
             else {
+                console.log("Creating post");
                 const file = data.image?.[0] ? await newService.uploadFile(data.image[0]) : null;
+                console.log("File : ", file);
 
                 if (file) {
                     const fileId = file.$id;
@@ -138,14 +150,14 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
                 <Input
                     label="Featured Image :"
                     type="file"
-                    className="mb-4"
+                    className="mb-4 cursor-pointer"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
                     {...register("image", { required: !post })}
                 />
                 {post && (
                     <div className="w-full mb-4">
                         <img
-                            src={newService.getFilePreview(post.featuredImage)}
+                            src={newService.getFileView(post.featuredImage)}
                             alt={post.title}
                             className="rounded-lg"
                         />
@@ -165,4 +177,4 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
     );
 };
 
-export default PostForm
+export default PostForm;

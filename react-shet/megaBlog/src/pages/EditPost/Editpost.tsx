@@ -14,23 +14,31 @@ const Editpost = () => {
 
     useEffect(() => {
         const hehe = async () => {
-            dispatch(setLoading(true));
-            if (slug) {
-                const response = await newService.getPost(slug);
+            try {
+                dispatch(setLoading(true));
+                if (slug) {
+                    const response = await newService.getPost(slug);
 
-                if (response) {
-                    setPost(response);
+                    if (response) {
+                        setPost(response);
+                    }
                 }
+                else {
+                    navigate("/");
+                };
             }
-            else {
-                navigate("/");
+            catch (error) {
+                console.log(error);
+            }
+            finally {
+                dispatch(setLoading(false));
             };
-            dispatch(setLoading(false));
         };
         hehe();
     }, [slug, navigate]);
 
     const mapPostToForm = (post: AppWriteExtendedTableType): AppWriteExtendedTableType & { slug: string } => {
+        console.log(post);
         return {
             ...post,
             slug: post.$id,
