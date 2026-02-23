@@ -13,6 +13,7 @@ const Protected = ({ children, authentication = true }: Allowable) => {
     const [loader, setLoader] = useState(true);
 
     useEffect(() => {
+        setLoader(true);
         if (authentication && authStatus !== authentication) {
             navigate("/login");
         }
@@ -22,10 +23,9 @@ const Protected = ({ children, authentication = true }: Allowable) => {
         setLoader(false);
     }, [authStatus,navigate,authentication])
     
-
     if (loader) {
         return (<><h1>Loading...</h1></>);
-    }
+    };
     return (<>{children}</>);
 }
 

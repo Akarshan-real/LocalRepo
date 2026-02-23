@@ -5,7 +5,7 @@ import store from './store/store.ts';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import App from './App.tsx';
-import { Error, Allposts, Home, Login, Post, Addpost, Editpost, Signup } from "../src/pages/index.ts";
+import { Error, Allposts, Home, Login, Post, Addpost, Editpost, Signup, AllUsersPosts } from "../src/pages/index.ts";
 import { Protected } from "../src/components/index.ts";
 
 const router = createBrowserRouter([{
@@ -32,6 +32,14 @@ const router = createBrowserRouter([{
           <Signup />
         </Protected>
       ),
+    },
+    {
+      path : "/all-users-posts",
+      element : (
+        <Protected authentication={false}>
+          <AllUsersPosts />
+        </Protected>
+      )
     },
     {
       path: "/all-posts",

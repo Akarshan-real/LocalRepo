@@ -1,5 +1,6 @@
 import Addpost from "./AddPost/Addpost";
 import Allposts from "./AllPosts/Allposts";
+import AllUsersPosts from "./AllUsersPosts/AllUsersPosts";
 import Editpost from "./EditPost/Editpost";
 import Error from "./Error/Error";
 import Home from "./Home/Home";
@@ -15,5 +16,6 @@ export {
     Login,
     Post,
     Signup,
-    Error
+    Error,
+    AllUsersPosts
 };

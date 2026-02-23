@@ -37,7 +37,7 @@ export class Service {
         }
     };
 
-    updatePost = async (slug: string, { title, content, featuredImage, status }: Omit<PostType, "userId" | "featuredImage" > & { featuredImage ?: string}) => {
+    updatePost = async (slug: string, { title, content, featuredImage, status }: Omit<PostType, "userId" | "featuredImage"> & { featuredImage?: string }) => {
         try {
             return await this.table.updateRow({
                 databaseId: secret.appWriteDataBaseId,
@@ -70,7 +70,7 @@ export class Service {
         }
     };
 
-    getPost = async (slug: string) : Promise<AppWriteExtendedTableType | null> => {
+    getPost = async (slug: string): Promise<AppWriteExtendedTableType | null> => {
         try {
             return await this.table.getRow<AppWriteExtendedTableType>({
                 databaseId: secret.appWriteDataBaseId,
@@ -98,7 +98,7 @@ export class Service {
         }
     };
 
-    getPostsByStatus = async (status: "active" | "inactive" = "active") => { 
+    getPostsByStatus = async (status: "active" | "inactive" = "active") => {
         try {
             return await this.table.listRows({
                 databaseId: secret.appWriteDataBaseId,
