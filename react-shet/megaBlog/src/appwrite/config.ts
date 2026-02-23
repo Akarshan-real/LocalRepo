@@ -2,6 +2,8 @@ import secret from '../config/config';
 import { Client, ID, Query, Storage, TablesDB, type Models } from "appwrite";
 import { type PostType } from '../Types/Post.type'
 import type { AppWriteExtendedTableType } from '../Types/Extended.table.type';
+import { useDispatch } from 'react-redux';
+import { setUserPosts } from '../store/postSlice';
 
 export class Service {
     client = new Client();
@@ -14,6 +16,11 @@ export class Service {
         this.table = new TablesDB(this.client);
 
         this.storage = new Storage(this.client);
+    };
+
+    slugToNormal = (slug: string) => {
+        const a = slug.replace("-", " ");
+        return a[0].toUpperCase();
     };
 
     createPost = async ({ title, slug, content, featuredImage, status, userId }: PostType & { slug: string }) => {

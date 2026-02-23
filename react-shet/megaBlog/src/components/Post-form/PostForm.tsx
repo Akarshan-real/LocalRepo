@@ -39,8 +39,6 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
         }
     });
 
-    // console.log(errors);
-
     const submit = async (data: Omit<FormType, "image"> & { image?: FileList }) => {
         dispatch(setLoading(true));
         try {
