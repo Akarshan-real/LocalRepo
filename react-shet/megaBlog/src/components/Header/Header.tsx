@@ -22,9 +22,9 @@ const Header = () => {
       active: !authStatus
     },
     {
-      name : "Your posts",
+      name: "Your posts",
       slug: "/user-posts",
-      active : authStatus
+      active: authStatus
     },
     {
       name: "All posts",
@@ -41,13 +41,13 @@ const Header = () => {
   return (
     <header className='py-3 shadow bg-gray-500'>
       <Container>
-        <nav className='flex'>
-          <div className='mr-4'>
+        <nav className='flex justify-end'>
+          <div className='mr-4 mid'>
             <Link to={"/"}>
-              <Logo className='w-28' />
+              <Logo className='w-10' />
             </Link>
           </div>
-          <ul className='flex ml-auto gap-2'>
+          <ul className='flex gap-2'>
             {navItems.map((item) => (
               item.active ? (
                 <li key={item.name}>

@@ -80,11 +80,13 @@ export default function Post() {
                         </div>
                     )}
                 </div>
-                <div className="w-full mb-6">
-                    <h1 className="text-2xl font-bold">{post.title}</h1>
-                </div>
-                <div className="browser-css">
-                    {parse(post.content)}
+                <div className="bg-slate-900 rounded-2xl">
+                    <div className="px-4 py-2 rounded-tl-2xl mb-6 bg-[#99A1AF] border z-10 box-border border-black w-fit">
+                        <h1 className="text-2xl font-bold">{post.title}</h1>
+                    </div>
+                    <div className="browser-css px-4 py-2 w-full rounded-2xl bg-slate-900 text-white">
+                        {parse(post.content)}
+                    </div>
                 </div>
             </Container>
         </div>
