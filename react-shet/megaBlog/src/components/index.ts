@@ -13,6 +13,7 @@ import Signup from "./Signup/Signup";
 import Login from "./Login/Login";
 import PostForm from "./Post-form/PostForm";
 import OverlayLoader from "./Loader/OverlayLoader";
+import PrevPostsEdit from "./PrevPosts/PrevPostsEdit";
 
 export {
     Header,
@@ -29,5 +30,6 @@ export {
     Signup,
     Login,
     PostForm,
-    OverlayLoader
+    OverlayLoader,
+    PrevPostsEdit
 };

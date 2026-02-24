@@ -14,7 +14,7 @@ const postSlice = createSlice({
     name: "allUserPosts",
     initialState: initialState,
     reducers: {
-        setUserPosts: (state, action) => {
+        setUserPosts: (state, action : {payload : postArrayType , type : any}) => {
             state.names = action.payload.names;
             state.slugs = action.payload.slugs;
         }

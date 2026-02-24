@@ -39,7 +39,7 @@ const Signup = () => {
                 }
             }
         } catch (error: any) {
-            setError(error);
+            setError(error.message);
         }
     }
 

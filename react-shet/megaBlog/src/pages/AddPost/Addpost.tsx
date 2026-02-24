@@ -1,26 +1,19 @@
+import { useState } from "react";
+import { Container, PostForm, PrevPostsEdit } from "../../components/index";
+import type { AppWriteExtendedTableType } from "../../Types/Extended.table.type";
 import { useSelector } from "react-redux";
-import { Container, PostForm } from "../../components/index";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
 
 const Addpost = () => {
-    const userPosts = useSelector((state: any) => state);
+    const [post, setPost] = useState<AppWriteExtendedTableType | null>(null);
+    const userData = useSelector((state: any) => state.auth.userData);
 
-    useEffect(() => {
-        console.log(userPosts);
-    }, []);
+    const isAuthor = post && userData ? post.userId === userData.$id : false;
 
     return (
         <div className="py-8">
             <Container>
                 <PostForm />
-                <div className="w-full">
-                    {userPosts.names.map((name: string, index: number) => (
-                        <Link to={`/edit-post/${userPosts.slug[index]}`} className="">
-                            {name}
-                        </Link>
-                    ))}
-                </div>
+                {isAuthor && <PrevPostsEdit className="mt-8 ml-2" />}
             </Container>
         </div>
     );

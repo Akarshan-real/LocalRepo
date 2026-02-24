@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container, PostForm } from "../../components/index";
+import { Container, PostForm , PrevPostsEdit } from "../../components/index";
 import newService from '../../appwrite/config';
 import { type AppWriteExtendedTableType } from '../../Types/Extended.table.type';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -53,6 +53,7 @@ const Editpost = () => {
                     <PostForm
                         post={mapPostToForm(post)}
                     />
+                    <PrevPostsEdit className='mt-8 ml-2' exceptSlug={slug} />
                 </Container>
             </div>
         );

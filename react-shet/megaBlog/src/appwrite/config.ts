@@ -118,6 +118,19 @@ export class Service {
         }
     };
 
+    getPostsByUserId = async (userId: string): Promise<Models.RowList<AppWriteExtendedTableType> | null> => {
+        try {
+            return this.table.listRows<AppWriteExtendedTableType>({
+                databaseId: secret.appWriteDataBaseId,
+                tableId: secret.appWriteTableId,
+                queries: [Query.equal("userId", userId)]
+            });
+        } catch (error) {
+            console.log("Appwrite error :: ", error);
+            return null;
+        }
+    };
+
     uploadFile = async (file: File) => {
         try {
             return await this.storage.createFile({

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { type PostType } from '../../Types/Post.type';
 import { setLoading } from '../../store/uxSlice';
-
+import { updateReduxSlugs } from '../../Helper/Function';
 type FormType = {
     title: string,
     slug: string,
@@ -21,6 +21,13 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const userdata = useSelector((state: any) => state.auth.userData);
+
+    const slugTransform = useCallback((value: unknown): string => {
+        if (value && typeof value === 'string') {
+            return value.trim().toLowerCase().replace(/\s+/g, "-");
+        }
+        return "";
+    }, []);
 
     const {
         register,
@@ -57,6 +64,8 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
 
                     if (dbUpdate) {
                         navigate(`/post/${dbUpdate.$id}`);
+
+                        updateReduxSlugs();
                     };
                 }
                 else {
@@ -66,6 +75,8 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
 
                     if (dbUpdate) {
                         navigate(`/post/${dbUpdate.$id}`);
+
+                        updateReduxSlugs();
                     };
                 };
             }
@@ -87,6 +98,7 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
                         });
                         if (dbPost) {
                             navigate(`/post/${dbPost.$id}`);
+                            updateReduxSlugs();
                         };
                     };
                 };
@@ -98,13 +110,6 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
             dispatch(setLoading(false));
         };
     };
-
-    const slugTransform = useCallback((value: unknown): string => {
-        if (value && typeof value === 'string') {
-            return value.trim().toLowerCase().replace(/\s+/g, "-");
-        }
-        return "";
-    }, []);
 
     useEffect(() => {
         const subscription = watch((value, { name }) => {
