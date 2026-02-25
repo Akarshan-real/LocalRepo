@@ -7,7 +7,7 @@ const store = configureStore({
     reducer: {
         auth: authSlice,
         ux: uxSlice,
-        allUsersPosts: postSlice,
+        allUserSlugs: postSlice,
     }
 });
 

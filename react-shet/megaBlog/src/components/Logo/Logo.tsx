@@ -1,7 +1,7 @@
 const Logo = ({ className = "w-8" }: { className?: string }) => {
     return (
         <div className={`${className}`}>
-            <img src="src\public\assets\logo.png" alt="logo" />
+            <img src="public\favicon.png" alt="logo" />
         </div>
     )
 }

@@ -5,16 +5,28 @@ import { login, logout } from './store/authSlice';
 import { Footer, Header, OverlayLoader } from './components';
 import { Outlet } from 'react-router-dom';
 import { setLoading } from './store/uxSlice';
+import newService from './appwrite/config';
+import { setUserSlugs } from './store/postSlice';
 
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     const checkUser = async () => {
-      dispatch(setLoading(true));
       try {
+        dispatch(setLoading(true));
         const userData = await authService.getCurrentUser();
-        dispatch(userData ? login(userData) : logout());
+        if (userData) {
+          const userSlugs = await newService.getSlugsByUserId(userData.$id);
+
+          if (userSlugs) {
+            dispatch(setUserSlugs(userSlugs));
+          }
+          dispatch(login(userData));
+        }
+        else {
+          dispatch(logout());
+        };
       }
       catch (err) {
         console.error(err);

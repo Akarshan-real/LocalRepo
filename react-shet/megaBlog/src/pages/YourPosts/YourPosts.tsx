@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import newService from "../../appwrite/config";
 import { Container, PostCard } from "../../components/index";
 import { Link } from "react-router-dom";
 import type { AppWriteTableType } from "../../Types/Table.type";
+import { setLoading } from "../../store/uxSlice";
 
 const YourPosts = () => {
-    const userSlugs = useSelector((state : any) => state.allUserSlugs.slugs);
+    const loggedInUserInfo = useSelector((state: any) => state.auth);
     const [posts, setPosts] = useState<AppWriteTableType[] | null>([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const hehe = async () => {
-            const response = await newService.getPostsBySlugs(userSlugs);
+            dispatch(setLoading(true));
+            const response = await newService.getPostsByUserId(loggedInUserInfo.userData.$id);
 
             if (response) {
                 setPosts(response.rows);
             };
+            dispatch(setLoading(false));
         };
         hehe();
     }, []);
@@ -25,7 +29,7 @@ const YourPosts = () => {
             <Container>
                 <div className="flex flex-wrap gap-4">
                     {posts && posts.length !== 0 ?
-                        posts.map((post : any) => (
+                        posts.map((post: any) => (
                             <div key={post.$id}>
                                 <PostCard
                                     {...post}

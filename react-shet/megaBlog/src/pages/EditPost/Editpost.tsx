@@ -53,7 +53,7 @@ const Editpost = () => {
                     <PostForm
                         post={mapPostToForm(post)}
                     />
-                    <PrevPostsEdit className='mt-8 ml-2' exceptSlug={slug} />
+                    <PrevPostsEdit className='mt-8 ml-2' exceptSlug={post.$id} />
                 </Container>
             </div>
         );

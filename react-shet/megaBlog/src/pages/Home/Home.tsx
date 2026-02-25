@@ -2,35 +2,26 @@ import { useEffect, useState } from "react"
 import newService from "../../appwrite/config"
 import { Container, PostCard } from "../../components/index"
 import type { AppWriteTableType } from "../../Types/Table.type";
-import {  useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../store/uxSlice";
-import { setUserSlugs } from "../../store/postSlice";
 
 const Home = () => {
     const [posts, setPosts] = useState<AppWriteTableType[]>([]);
     const loggedInInfo = useSelector((state: any) => state.auth);
-    
+
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(setLoading(true));
         const hehe = async () => {
+            dispatch(setLoading(true));
             const response = await newService.getPosts([]);
 
             if (response) {
                 setPosts(response.rows);
             };
-
-            if (loggedInInfo.status) {
-                const response = await newService.getSlugsByUserId(loggedInInfo.userData.$id);
-                
-                if (response) {
-                    dispatch(setUserSlugs(response));
-                };
-            };
+            dispatch(setLoading(false));
         };
         hehe();
-        dispatch(setLoading(false));
     }, []);
 
     if (posts.length > 0) {
