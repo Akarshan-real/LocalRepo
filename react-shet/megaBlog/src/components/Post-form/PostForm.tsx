@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { type PostType } from '../../Types/Post.type';
 import { setLoading } from '../../store/uxSlice';
-import { updateReduxSlugs } from '../../Helper/Function';
+
 type FormType = {
     title: string,
     slug: string,
@@ -46,6 +46,10 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
         }
     });
 
+    useEffect(() => {
+        console.log(errors);
+    }, [errors]);
+    
     const submit = async (data: Omit<FormType, "image"> & { image?: FileList }) => {
         dispatch(setLoading(true));
         try {
@@ -64,8 +68,6 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
 
                     if (dbUpdate) {
                         navigate(`/post/${dbUpdate.$id}`);
-
-                        updateReduxSlugs();
                     };
                 }
                 else {
@@ -75,8 +77,6 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
 
                     if (dbUpdate) {
                         navigate(`/post/${dbUpdate.$id}`);
-
-                        updateReduxSlugs();
                     };
                 };
             }
@@ -98,7 +98,6 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
                         });
                         if (dbPost) {
                             navigate(`/post/${dbPost.$id}`);
-                            updateReduxSlugs();
                         };
                     };
                 };

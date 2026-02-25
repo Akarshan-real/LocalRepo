@@ -2,9 +2,6 @@ import secret from '../config/config';
 import { Client, ID, Query, Storage, TablesDB, type Models } from "appwrite";
 import { type PostType } from '../Types/Post.type'
 import type { AppWriteExtendedTableType } from '../Types/Extended.table.type';
-import { useDispatch } from 'react-redux';
-import { setUserPosts } from '../store/postSlice';
-
 export class Service {
     client = new Client();
     table;
@@ -16,11 +13,6 @@ export class Service {
         this.table = new TablesDB(this.client);
 
         this.storage = new Storage(this.client);
-    };
-
-    slugToNormal = (slug: string) => {
-        const a = slug.replace("-", " ");
-        return a[0].toUpperCase();
     };
 
     createPost = async ({ title, slug, content, featuredImage, status, userId }: PostType & { slug: string }) => {
@@ -118,6 +110,24 @@ export class Service {
         }
     };
 
+    getSlugsByUserId = async (userId: string): Promise<string[] | null> => {
+        try {
+            const response = await this.table.listRows({
+                databaseId: secret.appWriteDataBaseId,
+                tableId: secret.appWriteTableId,
+                queries: [
+                    Query.equal("userId", userId),
+                    Query.select(["$id"])
+                ]
+            });
+
+            return response.rows.map(row => row.$id);
+        } catch (error) {
+            console.log("Appwrite error :: ", error);
+            return null;
+        };
+    };
+
     getPostsByUserId = async (userId: string): Promise<Models.RowList<AppWriteExtendedTableType> | null> => {
         try {
             return this.table.listRows<AppWriteExtendedTableType>({
@@ -125,6 +135,19 @@ export class Service {
                 tableId: secret.appWriteTableId,
                 queries: [Query.equal("userId", userId)]
             });
+        } catch (error) {
+            console.log("Appwrite error :: ", error);
+            return null;
+        }
+    };
+
+    getPostsBySlugs = async (slugs : string []): Promise<Models.RowList<AppWriteExtendedTableType> | null> => {
+        try {
+            return this.table.listRows({
+                databaseId : secret.appWriteDataBaseId,
+                tableId : secret.appWriteTableId,
+                queries : [Query.equal("$id",slugs)]
+            })
         } catch (error) {
             console.log("Appwrite error :: ", error);
             return null;

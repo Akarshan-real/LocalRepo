@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import newService from "../../appwrite/config";
-import type { AppWriteTableType } from "../../Types/Table.type";
 import { Container, PostCard } from "../../components/index";
 import { Link } from "react-router-dom";
+import type { AppWriteTableType } from "../../Types/Table.type";
 
 const YourPosts = () => {
-    const userId = useSelector((state: any) => state.auth.userData.userId);
-    const [posts, setPosts] = useState<AppWriteTableType[]>([]);
+    const userSlugs = useSelector((state : any) => state.allUserSlugs.slugs);
+    const [posts, setPosts] = useState<AppWriteTableType[] | null>([]);
 
     useEffect(() => {
         const hehe = async () => {
-            const response = await newService.getPostsByUserId(userId);
+            const response = await newService.getPostsBySlugs(userSlugs);
 
             if (response) {
                 setPosts(response.rows);
@@ -24,8 +24,8 @@ const YourPosts = () => {
         <div className="w-full py-8">
             <Container>
                 <div className="flex flex-wrap gap-4">
-                    {posts.length !== 0 ?
-                        posts.map((post) => (
+                    {posts && posts.length !== 0 ?
+                        posts.map((post : any) => (
                             <div key={post.$id}>
                                 <PostCard
                                     {...post}

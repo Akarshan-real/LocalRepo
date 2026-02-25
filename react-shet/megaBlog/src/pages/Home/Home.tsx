@@ -2,40 +2,35 @@ import { useEffect, useState } from "react"
 import newService from "../../appwrite/config"
 import { Container, PostCard } from "../../components/index"
 import type { AppWriteTableType } from "../../Types/Table.type";
-import { useDispatch, useSelector } from "react-redux";
-import { setUserPosts } from "../../store/postSlice";
+import {  useDispatch, useSelector } from "react-redux";
+import { setLoading } from "../../store/uxSlice";
+import { setUserSlugs } from "../../store/postSlice";
 
 const Home = () => {
     const [posts, setPosts] = useState<AppWriteTableType[]>([]);
-    const isLoggedIn = useSelector((state: any) => state.auth.status);
-
+    const loggedInInfo = useSelector((state: any) => state.auth);
+    
     const dispatch = useDispatch();
 
-    const slugToNormal = (slug: string) => {
-        const x = slug.replace(/\-+/g, " ").trim();
-        
-        return x[0].toUpperCase() + x.slice(1);
-    };
-
     useEffect(() => {
+        dispatch(setLoading(true));
         const hehe = async () => {
             const response = await newService.getPosts([]);
 
-            const names: string[] = [];
-            const slugs: string[] = [];
-
             if (response) {
-                response.rows.forEach((row) => (
-                    names.push(slugToNormal(row.$id)),
-                    slugs.push(row.$id)
-                ));
-
-                dispatch(setUserPosts({ names: names, slugs: slugs }));
-
                 setPosts(response.rows);
-            }
-        }
+            };
+
+            if (loggedInInfo.status) {
+                const response = await newService.getSlugsByUserId(loggedInInfo.userData.$id);
+                
+                if (response) {
+                    dispatch(setUserSlugs(response));
+                };
+            };
+        };
         hehe();
+        dispatch(setLoading(false));
     }, []);
 
     if (posts.length > 0) {
@@ -62,7 +57,7 @@ const Home = () => {
                 <div className="flex flex-wrap">
                     <div className="p-2 w-full">
                         <h1 className="text-2xl font-bold hover:text-gray-500">
-                            {isLoggedIn ? "Add post" : "Login to read posts"}
+                            {loggedInInfo.status ? "Add post" : "Login to read posts"}
                         </h1>
                     </div>
                 </div>

@@ -1,26 +1,28 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 type postArrayType = {
-    names: string[],
     slugs: string[],
+    tempSlug : string | null
 };
 
 const initialState: postArrayType = {
-    names: [],
     slugs: [],
+    tempSlug: null
 };
 
 const postSlice = createSlice({
-    name: "allUserPosts",
+    name: "allUserSlugs",
     initialState: initialState,
     reducers: {
-        setUserPosts: (state, action : {payload : postArrayType , type : any}) => {
-            state.names = action.payload.names;
-            state.slugs = action.payload.slugs;
+        setUserSlugs: (state, action: PayloadAction<postArrayType["slugs"]>) => {
+            state.slugs = action.payload;
+        },
+        setTempSlug: (state, action: PayloadAction<postArrayType["tempSlug"]>) => {
+            state.tempSlug = action.payload;
         }
     }
 });
 
-export const { setUserPosts } = postSlice.actions;
+export const { setUserSlugs , setTempSlug } = postSlice.actions;
 
 export default postSlice.reducer;

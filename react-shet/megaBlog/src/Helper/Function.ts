@@ -1,30 +1,35 @@
-import { useDispatch } from "react-redux";
 import newService from "../appwrite/config";
-import { setUserPosts } from "../store/postSlice";
 
 export const sleep = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms));
 };
 
 export const slugToNormal = (slug: string) => {
-    const x = slug.replace(/\-+/g, " ").trim();
-
-    return x[0].toUpperCase() + x.slice(1);
+    if (slug) {
+        const x = slug.replace(/\-+/g, " ").trim();
+        return x[0].toUpperCase() + x.slice(1);
+    };
+    
+    return "";
 };
 
-export const updateReduxSlugs = async () => {
-    const dispatch = useDispatch();
-    const response = await newService.getPosts([]);
+export const getPostBySlug = async (slug : string) => {
+    const response = await newService.getPostsByUserId(slug);
 
-    let newNames: string[] = [];
-    let newSlugs: string[] = [];
-
-    if (response) {
-        response.rows.forEach((row) => (
-            newNames.push(slugToNormal(row.$id)),
-            newSlugs.push(row.$id)
-        ));
+    if (!response?.rows || response === null) {
+        return null;
     };
 
-    dispatch(setUserPosts({ names: newNames, slugs: newSlugs }));
-}
+    const mapped = response.rows.map((row) => {
+        const id = row.$id;
+        return {
+            slug : id ,
+            name : slugToNormal(id)
+        };
+    });
+
+    return {
+        names : mapped.map(m => m.name),
+        slugs : mapped.map(m => m.slug)
+    };
+};
