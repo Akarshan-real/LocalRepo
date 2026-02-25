@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container, PostForm , PrevPostsEdit } from "../../components/index";
+import { Container, PostForm, PrevPostsEdit } from "../../components/index";
 import newService from '../../appwrite/config';
 import { type AppWriteExtendedTableType } from '../../Types/Extended.table.type';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -35,7 +35,7 @@ const Editpost = () => {
             };
         };
         hehe();
-    }, [slug, navigate]);
+    }, [slug, navigate, dispatch]);
 
     const mapPostToForm = (post: AppWriteExtendedTableType): AppWriteExtendedTableType & { slug: string } => {
         console.log(post);
@@ -48,7 +48,7 @@ const Editpost = () => {
 
     if (post) {
         return (
-            <div className='py-8'>
+            <div className='py-8 bg-(--bg) text-(--text) min-h-screen'>
                 <Container>
                     <PostForm
                         post={mapPostToForm(post)}
@@ -59,7 +59,9 @@ const Editpost = () => {
         );
     };
 
-    return null;
+    return (
+        <div className="min-h-screen bg-(--bg) text-(--text)" />
+    );
 }
 
 export default Editpost

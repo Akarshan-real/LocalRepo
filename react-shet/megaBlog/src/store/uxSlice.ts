@@ -1,11 +1,13 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 type UXState = {
-    loading: boolean
+    loading: boolean,
+    theme : "dark" | "light"
 };
 
 const initialState: UXState = {
-    loading: false
+    loading: false,
+    theme : "dark"
 };
 
 const uxSlice = createSlice({
@@ -14,10 +16,13 @@ const uxSlice = createSlice({
     reducers: {
         setLoading: (state, action: PayloadAction<boolean>) => {
             state.loading = action.payload;
+        },
+        setTheme : (state,action : PayloadAction<UXState["theme"]>) => {
+            state.theme = action.payload;
         }
     }
 });
 
-export const { setLoading } = uxSlice.actions;
+export const { setLoading , setTheme } = uxSlice.actions;
 
 export default uxSlice.reducer;

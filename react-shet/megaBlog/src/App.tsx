@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import authService from './appwrite/auth';
 import { login, logout } from './store/authSlice';
-import { Footer, Header, OverlayLoader } from './components';
+import { Footer, Header, OverlayLoader, ThemeController } from './components';
 import { Outlet } from 'react-router-dom';
 import { setLoading } from './store/uxSlice';
 import newService from './appwrite/config';
@@ -42,6 +42,7 @@ function App() {
 
   return (
     <OverlayLoader>
+      <ThemeController />
       <div className='min-h-screen w-full flex flex-wrap content-between bg-gray-400'>
         <div className='w-full block'>
           <Header />

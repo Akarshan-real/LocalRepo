@@ -1,11 +1,13 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { LogoutButton, Container, Logo } from '../index';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { setTheme } from '../../store/uxSlice';
 
 const Header = () => {
-
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const theme = useSelector((state: any) => state.ux.theme);
   const authStatus = useSelector((x: any) => x.auth.status);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -18,8 +20,17 @@ const Header = () => {
     { name: "Add Post", slug: "/add-post", active: authStatus }
   ];
 
+  const themeChange = () => {
+    if (theme === "dark") {
+      dispatch(setTheme("light"));
+    }
+    else {
+      dispatch(setTheme("dark"));
+    }
+  };
+
   return (
-    <header className="py-3 shadow bg-gray-500">
+    <header className="py-3 shadow bg-(--surface) text-(--text)">
       <Container>
 
         <nav className="flex items-center justify-between">
@@ -34,7 +45,7 @@ const Header = () => {
                 item.active ? (
                   <li key={item.name} className="shrink-0">
                     <button
-                      className="inline-block whitespace-nowrap px-6 py-2 rounded-full hover:bg-blue-100 transition"
+                      className="inline-block whitespace-nowrap px-6 py-2 rounded-full transition hover:bg-(--surface)"
                       onClick={() => navigate(item.slug)}
                     >
                       {item.name}
@@ -42,6 +53,14 @@ const Header = () => {
                   </li>
                 ) : null
               )}
+              <li className="shrink-0">
+                <button
+                  onClick={themeChange}
+                  className="px-4 py-2 rounded-full transition bg-(--primary) text-white hover:bg-(--primary-hover)"
+                >
+                  {theme === "dark" ? "☀ Light" : "🌙 Dark"}
+                </button>
+              </li>
               {authStatus && (
                 <li>
                   <LogoutButton />
@@ -51,7 +70,7 @@ const Header = () => {
           </div>
 
           <button
-            className="md:hidden text-white text-2xl"
+            className="md:hidden text-(--text) text-2xl"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             ☰
@@ -66,7 +85,7 @@ const Header = () => {
                 item.active ? (
                   <li key={item.name}>
                     <button
-                      className="w-full text-left px-4 py-2 bg-white rounded-lg"
+                      className="w-full text-left px-4 py-2 bg-(--card) text-(--text) border border-(--border) rounded-lg"
                       onClick={() => {
                         navigate(item.slug);
                         setMenuOpen(false);
@@ -77,6 +96,14 @@ const Header = () => {
                   </li>
                 ) : null
               )}
+              <li className="shrink-0">
+                <button
+                  onClick={themeChange}
+                  className="px-4 py-2 rounded-full transition bg-(--primary) text-white hover:bg-(--primary-hover)"
+                >
+                  {theme === "dark" ? "☀ Light" : "🌙 Dark"}
+                </button>
+              </li>
               {authStatus && (
                 <li>
                   <LogoutButton />

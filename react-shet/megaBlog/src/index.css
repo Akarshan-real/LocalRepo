@@ -1,14 +1,97 @@
 @import "tailwindcss";
-.mid {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+:root {
+  --light-bg: #F6F8FC;
+  --light-surface: #E9EDF5;
+  --light-card: #FFFFFF;
+
+  --light-primary: #5B6EF5;
+  --light-primary-hover: #4959D6;
+
+  --light-danger: #ef4444;
+  --light-danger-hover: #dc2626;
+
+  --light-accent: #F38BA8;
+  --light-accent-hover: #E0658C;
+
+  --light-text: #1A2238;
+  --light-text-muted: #64748B;
+
+  --light-border: #D6DAE6;
+
+
+  --dark-bg: #0B1120;
+  --dark-surface: #131A2B;
+  --dark-card: #1C2438;
+
+  --dark-danger: #f87171;
+  --dark-danger-hover: #ef4444;
+
+  --dark-primary: #38BDF8;
+  --dark-primary-hover: #0EA5E9;
+
+  --dark-accent: #A78BFA;
+  --dark-accent-hover: #8B5CF6;
+
+  --dark-text: #E2E8F0;
+  --dark-text-muted: #94A3B8;
+
+  --dark-border: #2A334A;
 }
+
+:root {
+  --bg: var(--light-bg);
+  --surface: var(--light-surface);
+  --card: var(--light-card);
+
+  --primary: var(--light-primary);
+  --primary-hover: var(--light-primary-hover);
+
+  --accent: var(--light-accent);
+  --accent-hover: var(--light-accent-hover);
+
+  --text: var(--light-text);
+  --text-muted: var(--light-text-muted);
+
+  --border: var(--light-border);
+}
+
+.dark {
+  --bg: var(--dark-bg);
+  --surface: var(--dark-surface);
+  --card: var(--dark-card);
+
+  --primary: var(--dark-primary);
+  --primary-hover: var(--dark-primary-hover);
+
+  --accent: var(--dark-accent);
+  --accent-hover: var(--dark-accent-hover);
+
+  --text: var(--dark-text);
+  --text-muted: var(--dark-text-muted);
+
+  --border: var(--dark-border);
+}
+
+;
+
+.mid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+;
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+;
 
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+;

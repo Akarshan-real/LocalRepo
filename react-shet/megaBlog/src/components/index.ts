@@ -14,6 +14,7 @@ import Login from "./Login/Login";
 import PostForm from "./Post-form/PostForm";
 import OverlayLoader from "./Loader/OverlayLoader";
 import PrevPostsEdit from "./PrevPosts/PrevPostsEdit";
+import ThemeController from "./ThemeController/ThemeController";
 
 export {
     Header,
@@ -31,5 +32,6 @@ export {
     Login,
     PostForm,
     OverlayLoader,
-    PrevPostsEdit
+    PrevPostsEdit,
+    ThemeController
 };

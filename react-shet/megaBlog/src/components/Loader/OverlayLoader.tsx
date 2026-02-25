@@ -1,8 +1,13 @@
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useSelector } from "react-redux";
 
 const OverlayLoader = ({ children }: { children: ReactNode }) => {
     const globalLoading = useSelector((state: any) => state.ux.loading);
+
+    useEffect(() => {
+        document.body.style.overflow = globalLoading ? "hidden" : "auto";
+    }, [globalLoading]);
+    
 
     return (
         <div className="relative">

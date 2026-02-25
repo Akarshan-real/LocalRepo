@@ -13,20 +13,26 @@ const Home = () => {
 
     useEffect(() => {
         const hehe = async () => {
-            dispatch(setLoading(true));
-            const response = await newService.getPosts([]);
+            try {
+                dispatch(setLoading(true));
+                const response = await newService.getPosts([]);
 
-            if (response) {
-                setPosts(response.rows);
+                if (response) {
+                    setPosts(response.rows);
+                };
+            } catch (error) {
+                console.log(error);
+            }
+            finally {
+                dispatch(setLoading(false));
             };
-            dispatch(setLoading(false));
         };
         hehe();
-    }, []);
+    }, [dispatch]);
 
     if (posts.length > 0) {
         return (
-            <div className="w-full py-8 home">
+            <div className="w-full py-8 home bg-(--bg) text-(--text)">
                 <Container>
                     <div className="flex flex-wrap gap-4">
                         {posts.map((post) => (
@@ -43,12 +49,15 @@ const Home = () => {
     };
 
     return (
-        <div className="w-full py-8 mt-4 text-center">
+        <div className="w-full py-8 mt-4 bg-(--bg) text-(--text) text-center">
             <Container>
                 <div className="flex flex-wrap">
                     <div className="p-2 w-full">
-                        <h1 className="text-2xl font-bold hover:text-gray-500">
-                            {loggedInInfo.status ? "Add post" : "Login to read posts"}
+                        <h1 className="text-2xl font-bold hover:text-(--primary)">
+                            {loggedInInfo.status
+                                ? "No posts yet. Create your first one."
+                                : "Login to explore posts."
+                            }
                         </h1>
                     </div>
                 </div>

@@ -18,47 +18,50 @@ export default function Post() {
     const isAuthor = post && userData ? post.userId === userData.$id : false;
 
     useEffect(() => {
-        try {
+        const fetchPost = async () => {
             dispatch(setLoading(true));
-            const hehe = async () => {
+            try {
                 if (slug) {
                     const response = await newService.getPost(slug);
 
                     if (response) {
                         setPost(response);
-                    }
-                    else {
+                    } else {
                         navigate("/");
                     }
-                }
-                else {
+                } else {
                     navigate("/");
-                };
-            };
-            hehe();
-        } catch (error) {
-            console.log(error);
-        }
-        finally {
-            dispatch(setLoading(false));
-        }
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                dispatch(setLoading(false));
+            }
+        };
 
-    }, [slug, navigate]);
+        fetchPost();
+    }, [slug, navigate, dispatch]);
 
     const deletePost = async () => {
-        if (post) {
-            dispatch(setLoading(true));
+        if (!post) return;
+
+        dispatch(setLoading(true));
+        try {
             const status = await newService.deletePost(post.$id);
+
             if (status) {
                 await newService.deleteFile(post.featuredImage);
                 navigate("/");
-            };
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
             dispatch(setLoading(false));
-        };
+        }
     };
 
     return post ? (
-        <div className="py-8 post">
+        <div className="py-8 post bg-(--bg) text-(--text) min-h-screen">
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
                     <img
@@ -70,25 +73,27 @@ export default function Post() {
                     {isAuthor && (
                         <div className="absolute right-6 top-6">
                             <Link to={`/edit-post/${post.$id}`}>
-                                <Button bgColor="bg-green-500" className="mr-3">
+                                <Button bgColor="bg-(--primary) text-white" className="mr-3">
                                     Edit
                                 </Button>
                             </Link>
-                            <Button bgColor="bg-red-500" onClick={deletePost}>
+                            <Button bgColor="bg-(--danger)" onClick={deletePost}>
                                 Delete
                             </Button>
                         </div>
                     )}
                 </div>
-                <div className="bg-slate-900 rounded-2xl">
-                    <div className="px-4 py-2 rounded-tl-2xl mb-6 bg-[#99A1AF] border z-10 box-border border-black w-fit">
+                <div className="bg-(--card) border border-(--border) rounded-2xl">
+                    <div className="px-4 py-2 rounded-tl-2xl mb-6 bg-(--surface) border border-(--border) w-fit">
                         <h1 className="text-2xl font-bold">{post.title}</h1>
                     </div>
-                    <div className="browser-css px-4 py-2 w-full rounded-2xl bg-slate-900 text-white">
+                    <div className="browser-css px-4 py-2 w-full rounded-2xl bg-(--card) text-(--text)">
                         {parse(post.content)}
                     </div>
                 </div>
             </Container>
         </div>
-    ) : null;
+    ) : (
+        <div className="min-h-screen bg-(--bg)" />
+    );
 };
