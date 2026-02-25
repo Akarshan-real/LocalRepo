@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { Button, Input, Logo } from '../index';
 import { useForm } from "react-hook-form";
 import type { SignUpCredentials } from "../../Types/Signup.type";
+import { setLoading } from "../../store/uxSlice";
 
 
 const Signup = () => {
@@ -14,11 +15,13 @@ const Signup = () => {
 
     useEffect(() => {
         const hehe = async () => {
+            dispatch(setLoading(true));
             const userData = await authService.getCurrentUser();
             if (userData) {
                 dispatch(authLogin(userData));
                 navigate("/");
             };
+            dispatch(setLoading(false));
         };
         hehe();
     }, []);
@@ -30,6 +33,7 @@ const Signup = () => {
     const create = async (data: SignUpCredentials) => {
         setError("");
         try {
+            dispatch(setLoading(true));
             const response = await authService.createAccount(data);
             if (response) {
                 const userData = await authService.getCurrentUser();
@@ -41,7 +45,10 @@ const Signup = () => {
         } catch (error: any) {
             setError(error.message);
         }
-    }
+        finally {
+            dispatch(setLoading(false));
+        };
+    };
 
     return (
         <div className="flex items-center justify-center">
@@ -52,7 +59,7 @@ const Signup = () => {
                     </span>
                 </div>
                 <h2 className="text-center text-2xl font-bold leading-tight">Sign up to create account</h2>
-                <p className="mt-2 text-center text-base text-black/60">
+                <p className="my-4 text-center text-base text-black/60">
                     Already have an account?&nbsp;
                     <Link
                         to="/login"
