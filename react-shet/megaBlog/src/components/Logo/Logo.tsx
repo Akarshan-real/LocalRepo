@@ -1,9 +1,9 @@
 const Logo = ({ className = "w-8" }: { className?: string }) => {
     return (
         <div className={`${className}`}>
-            <img src="public\favicon.png" alt="logo" />
+            <img src="/favicon.png" alt="logo" />
         </div>
     )
 }
 
-export default Logo
+export default Logo;
