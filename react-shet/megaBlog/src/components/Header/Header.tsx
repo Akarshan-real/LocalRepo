@@ -45,7 +45,7 @@ const Header = () => {
                 item.active ? (
                   <li key={item.name} className="shrink-0">
                     <button
-                      className="inline-block whitespace-nowrap px-6 py-2 rounded-full transition hover:bg-(--surface)"
+                      className="inline-block whitespace-nowrap px-6 py-2 rounded-full transition hover:bg-(--surface) cursor-pointer"
                       onClick={() => navigate(item.slug)}
                     >
                       {item.name}
@@ -70,7 +70,7 @@ const Header = () => {
           </div>
 
           <button
-            className="md:hidden text-(--text) text-2xl"
+            className="md:hidden text-(--text) text-2xl cursor-pointer"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             ☰
@@ -85,7 +85,7 @@ const Header = () => {
                 item.active ? (
                   <li key={item.name}>
                     <button
-                      className="w-full text-left px-4 py-2 bg-(--card) text-(--text) border border-(--border) rounded-lg"
+                      className="w-full text-left px-4 py-2 bg-(--card) text-(--text) border border-(--border) rounded-lg cursor-pointer"
                       onClick={() => {
                         navigate(item.slug);
                         setMenuOpen(false);
@@ -99,7 +99,7 @@ const Header = () => {
               <li className="shrink-0">
                 <button
                   onClick={themeChange}
-                  className="px-4 py-2 rounded-full transition bg-(--primary) text-white hover:bg-(--primary-hover)"
+                  className="px-4 py-2 cursor-pointer rounded-full transition bg-(--primary) text-white hover:bg-(--primary-hover)"
                 >
                   {theme === "dark" ? "☀ Light" : "🌙 Dark"}
                 </button>
