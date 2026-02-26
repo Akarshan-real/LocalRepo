@@ -43,15 +43,18 @@ function App() {
   return (
     <OverlayLoader>
       <ThemeController />
-      <div className='min-h-screen w-full flex flex-wrap content-between bg-gray-400'>
-        <div className='w-full block'>
+
+      <div className="flex flex-col bg-(--bg) text-(--text)">
+
           <Header />
+
           <main>
             <Outlet />
           </main>
+
           <Footer />
-        </div>
       </div>
+
     </OverlayLoader>
   )
 }

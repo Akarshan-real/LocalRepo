@@ -14,10 +14,20 @@ const Login = () => {
 
     useEffect(() => {
         const hehe = async () => {
-            const userData = await authService.getCurrentUser();
-            if (userData) {
-                dispatch(authLogin(userData));
+            dispatch(setLoading(true));
+            try {
+                const userData = await authService.getCurrentUser();
+                if (userData) {
+                    dispatch(authLogin(userData));
+                    navigate("/");
+                };
+            }
+            catch (error) {
+                console.log(error);
                 navigate("/");
+            }
+            finally {
+                dispatch(setLoading(false));
             };
         }
         hehe();
@@ -42,38 +52,40 @@ const Login = () => {
             }
         }
         catch (error: any) {
-            setError(error.message)
+            setError(error.message);
+            navigate("/");
         }
         finally {
             dispatch(setLoading(false));
-        }
+        };
     };
 
     return (
-        <div className="flex items-center justify-center w-full">
-            <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
-                <div className="mb-2 flex justify-center">
+        <div className="flex items-center justify-center min-h-screen bg-(--bg) text-(--text)">
+            <div className="mx-auto w-full max-w-lg bg-(--card) rounded-xl p-10 border border-(--border)">
+                <div className="mb-2 flex justify-center p-2 rounded-lg bg-(--surface)">
                     <span className="inline-block w-full max-w-25">
                         <Logo className="w-full" />
                     </span>
                 </div>
-                <h2 className="text-center text-2xl font-bold leading-tight">Sign in to your account</h2>
-                <p className="mt-2 text-center text-base text-black/60">
+                <h2 className="text-center text-2xl mt-4 font-bold leading-tight">Sign in to your account</h2>
+                <p className="mt-4 mb-2 text-center text-base text-(--text-muted)">
                     Don&apos;t have any account?&nbsp;
                     <Link
                         to="/signup"
-                        className="font-medium cursor-pointer text-primary transition-all duration-200 hover:underline"
+                        className="font-medium cursor-pointer text-(--primary) transition-all duration-200 hover:underline"
                     >
                         Sign Up
                     </Link>
                 </p>
 
-                {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
-                <form onSubmit={handleSubmit(login)} className="mt-8">
+                {error && <p className="text-(--danger) mt-4 text-center">{error}</p>}
+                <form onSubmit={handleSubmit(login)} className="mt-4">
                     <div className="space-y-5">
                         <Input
                             label="Email : "
                             placeholder="Enter your email"
+                            autoComplete="email"
                             type="email"
                             {...register("email", {
                                 required: true,
@@ -86,6 +98,7 @@ const Login = () => {
                             label="Password : "
                             placeholder="Enter your password"
                             type="password"
+                            autoComplete="current-password"
                             {...register("password", {
                                 required: true,
                                 minLength: { value: 6, message: "Password must be at least 6 characters" },
@@ -95,7 +108,7 @@ const Login = () => {
                         />
                         <Button
                             type="submit"
-                            className="w-full cursor-pointer"
+                            className="w-full cursor-pointer mt-4"
                             disabled={loading}
                         >
                             Sign in

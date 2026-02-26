@@ -2,12 +2,30 @@ import { useEffect, useState } from "react"
 import newService from "../../appwrite/config"
 import { Container, PostCard } from "../../components/index"
 import type { AppWriteTableType } from "../../Types/Table.type";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/uxSlice";
+import { Link } from "react-router-dom";
 
 const Home = () => {
     const [posts, setPosts] = useState<AppWriteTableType[]>([]);
-    const loggedInInfo = useSelector((state: any) => state.auth);
+    const [totalHeight, setTotalHeight] = useState(500);
+
+    useEffect(() => {
+        const calculate = () => {
+            const footer = document.querySelector("footer");
+            const header = document.querySelector("header");
+
+            const footerHeight = footer ? (footer as HTMLElement).offsetHeight : 0;
+            const headerHeight = header ? (header as HTMLElement).offsetHeight : 0;
+
+            setTotalHeight(footerHeight + headerHeight);
+        };
+
+        setTimeout(calculate, 100);
+        window.addEventListener("resize", calculate);
+        return () => window.removeEventListener("resize", calculate);
+    }, []);
+
 
     const dispatch = useDispatch();
 
@@ -49,19 +67,15 @@ const Home = () => {
     };
 
     return (
-        <div className="w-full py-8 mt-4 bg-(--bg) text-(--text) text-center">
-            <Container>
-                <div className="flex flex-wrap">
-                    <div className="p-2 w-full">
-                        <h1 className="text-2xl font-bold hover:text-(--primary)">
-                            {loggedInInfo.status
-                                ? "No posts yet. Create your first one."
-                                : "Login to explore posts."
-                            }
-                        </h1>
-                    </div>
-                </div>
-            </Container>
+        <div
+            className="w-full flex flex-col items-center justify-center bg-(--bg) text-(--text) text-center py-4"
+            style={{ minHeight: `calc(100vh - ${totalHeight}px)` }}
+        >
+            <h1 className="text-2xl font-bold hover:text-(--primary) transition">
+                <Link to="/login" className="flex items-center justify-center">
+                    Get started to explore posts
+                </Link>
+            </h1>
         </div>
     );
 }

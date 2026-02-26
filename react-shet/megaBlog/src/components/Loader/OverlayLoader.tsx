@@ -5,26 +5,40 @@ const OverlayLoader = ({ children }: { children: ReactNode }) => {
     const globalLoading = useSelector((state: any) => state.ux.loading);
 
     useEffect(() => {
-        document.body.style.overflow = globalLoading ? "hidden" : "auto";
+        const root = document.documentElement;
+
+        if (globalLoading) {
+            root.classList.add("overflow-hidden");
+            root.classList.add("touch-none");
+        } else {
+            root.classList.remove("overflow-hidden");
+            root.classList.remove("touch-none");
+        }
     }, [globalLoading]);
-    
+
 
     return (
-        <div className="relative">
+        <div className="relative isolate">
 
             {children}
 
             {globalLoading && (
-                <div className="fixed inset-0 z-9999 flex items-center justify-center
-                        bg-black/40 backdrop-blur-[2px]
-                        pointer-events-auto">
+                <div
+                    className="
+                    fixed inset-0 
+                    z-999999 
+                    flex items-center justify-center
+                    bg-(--bg)/70 
+                    backdrop-blur-sm
+                    transition-opacity
+                ">
 
-                    <div className='w-16 h-16 rounded-full 
-                          border-r-4 border-b-transparent 
-                          border-b-4 border-t-4 border-l-4 
-                          border-black 
-                          animate-spin'>
-                    </div>
+                    <div
+                        className="w-14 h-14 rounded-full 
+                        border-4 border-(--primary) 
+                        border-t-transparent 
+                        animate-spin"
+                    />
 
                 </div>
             )}

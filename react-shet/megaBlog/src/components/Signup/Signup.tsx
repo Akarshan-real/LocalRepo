@@ -15,13 +15,21 @@ const Signup = () => {
 
     useEffect(() => {
         const hehe = async () => {
-            dispatch(setLoading(true));
-            const userData = await authService.getCurrentUser();
-            if (userData) {
-                dispatch(authLogin(userData));
+            try {
+                dispatch(setLoading(true));
+                const userData = await authService.getCurrentUser();
+                if (userData) {
+                    dispatch(authLogin(userData));
+                    navigate("/");
+                };
+                
+            } catch (error) {
+                console.log(error);
                 navigate("/");
-            };
-            dispatch(setLoading(false));
+            }
+            finally {
+                dispatch(setLoading(false));
+            }
         };
         hehe();
     }, []);
@@ -34,9 +42,17 @@ const Signup = () => {
         setError("");
         try {
             dispatch(setLoading(true));
+
             const response = await authService.createAccount(data);
+
             if (response) {
+                await authService.login({
+                    email: data.email,
+                    password: data.password
+                });
+
                 const userData = await authService.getCurrentUser();
+
                 if (userData) {
                     dispatch(authLogin(userData));
                     navigate("/");
@@ -51,28 +67,30 @@ const Signup = () => {
     };
 
     return (
-        <div className="flex items-center justify-center">
-            <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
-                <div className="mb-2 flex justify-center">
+        <div className="flex items-center justify-center min-h-screen bg-(--bg) text-(--text)">
+            <div className="mx-auto w-full max-w-lg bg-(--card) text-(--text) rounded-xl p-10 border border-(--border)">
+                <div className="mb-2 flex justify-center p-2 rounded-lg bg-(--surface)">
                     <span className="inline-block w-full max-w-25">
                         <Logo className="w-full" />
                     </span>
                 </div>
-                <h2 className="text-center text-2xl font-bold leading-tight">Sign up to create account</h2>
-                <p className="my-4 text-center text-base text-black/60">
+                <h2 className="text-center text-2xl mt-4 font-bold leading-tight">Sign up to create account</h2>
+                <p className="my-4 text-center text-base text-(--text-muted)">
                     Already have an account?&nbsp;
                     <Link
                         to="/login"
-                        className="font-medium cursor-pointer text-primary transition-all duration-200 hover:underline"
+                        className="font-medium cursor-pointer text-(--primary) transition-all duration-200 hover:underline"
                     >
                         Sign In
                     </Link>
                 </p>
-                {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
+                {error && <p className="text-(--danger) mt-8 text-center">{error}</p>}
                 <form onSubmit={handleSubmit(create)}>
                     <div className="space-y-5">
                         <Input
                             label="Full Name : "
+                            type="text"
+                            autoComplete="name"
                             placeholder="Enter your full name"
                             {...register("name", {
                                 required: true
@@ -82,6 +100,7 @@ const Signup = () => {
                             label="Email : "
                             placeholder="Enter your email"
                             type="email"
+                            autoComplete="email"
                             {...register("email", {
                                 required: true,
                                 validate: {
@@ -91,8 +110,9 @@ const Signup = () => {
                         />
                         <Input
                             label="Password : "
-                            placeholder="Enter your password"
                             type="password"
+                            autoComplete="new-password"
+                            placeholder="Enter your password"
                             {...register("password", {
                                 required: true,
                                 minLength: { value: 6, message: "Password must be at least 6 characters" },

@@ -3,8 +3,8 @@ import { Logo } from '../index';
 
 const Footer = () => {
   return (
-    <footer>
-      <section className="relative overflow-hidden py-10 bg-(--surface) border border-t-2 border-t-(--border)">
+    <footer id='footer'>
+      <section className="relative overflow-hidden py-10 bg-(--surface) border border-x-0 border-y-2 border-y-(--border)">
         <div className="relative z-10 mx-auto max-w-7xl px-4">
           <div className="-m-6 flex flex-wrap">
             <div className="w-full p-6 md:w-1/2 lg:w-5/12">
