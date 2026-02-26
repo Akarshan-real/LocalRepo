@@ -3,11 +3,12 @@ import { Container, PostForm, PrevPostsEdit } from "../../components/index";
 import newService from '../../appwrite/config';
 import { type AppWriteExtendedTableType } from '../../Types/Extended.table.type';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../../store/uxSlice';
 
 const Editpost = () => {
     const [post, setPost] = useState<AppWriteExtendedTableType | null>(null);
+    const userSlugs = useSelector((state : any) => state.allUserSlugs.slugs);
     const { slug } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -53,7 +54,7 @@ const Editpost = () => {
                     <PostForm
                         post={mapPostToForm(post)}
                     />
-                    <PrevPostsEdit className='mt-8 ml-2' exceptSlug={post.$id} />
+                    {userSlugs.length > 1 && <PrevPostsEdit className='mt-8 ml-2' exceptSlug={post.$id} />}
                 </Container>
             </div>
         );

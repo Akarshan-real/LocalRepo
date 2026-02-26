@@ -49,7 +49,7 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
     useEffect(() => {
         console.log(errors);
     }, [errors]);
-    
+
     const submit = async (data: Omit<FormType, "image"> & { image?: FileList }) => {
         dispatch(setLoading(true));
         try {
@@ -123,8 +123,8 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
     }, [watch, slugTransform, setValue]);
 
     return (
-        <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
-            <div className="w-2/3 px-2">
+        <form onSubmit={handleSubmit(submit)} className="flex flex-wrap bg-(--card) border border-(--border) rounded-2xl p-6">
+            <div className="w-full md:w-2/3 px-2">
                 <Input
                     label="Title :"
                     placeholder="Title"
@@ -148,20 +148,20 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
                     defaultValue={getValues("content")}
                 />
             </div>
-            <div className="w-1/3 px-2">
+            <div className="w-full md:w-1/3 px-2">
                 <Input
                     label="Featured Image :"
                     type="file"
-                    className="mb-4 cursor-pointer"
+                    className="mb-4 cursor-pointer file:cursor-pointer"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
                     {...register("image", { required: !post })}
                 />
                 {post && (
-                    <div className="w-full mb-4">
+                    <div className="w-full aspect-video mb-4 overflow-hidden rounded-lg border border-(--border)">
                         <img
                             src={newService.getFileView(post.featuredImage)}
                             alt={post.title}
-                            className="rounded-lg"
+                            className="w-full h-full object-cover"
                         />
                     </div>
                 )}
@@ -171,7 +171,12 @@ const PostForm = ({ post }: { post?: PostPropType }) => {
                     className="mb-4"
                     {...register("status", { required: true })}
                 />
-                <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
+                <Button
+                    type="submit"
+                    bgColor={post ? "bg-(--accent) hover:bg-(--accent-hover)" : "bg-(--primary) hover:bg-(--primary-hover)"}
+                    textColor='text-white'
+                    className="w-full"
+                >
                     {post ? "Update" : "Submit"}
                 </Button>
             </div>

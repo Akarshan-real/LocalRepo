@@ -12,20 +12,30 @@ const YourPosts = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const hehe = async () => {
+        const fetchPosts = async () => {
             dispatch(setLoading(true));
-            const response = await newService.getPostsByUserId(loggedInUserInfo.userData.$id);
+            try {
+                const response = await newService.getPostsByUserId(
+                    loggedInUserInfo.userData.$id
+                );
 
-            if (response) {
-                setPosts(response.rows);
-            };
-            dispatch(setLoading(false));
+                if (response) {
+                    setPosts(response.rows);
+                };
+            } catch (err) {
+                console.log(err);
+            } finally {
+                dispatch(setLoading(false));
+            }
         };
-        hehe();
-    }, []);
+
+        if (loggedInUserInfo?.userData?.$id) {
+            fetchPosts();
+        }
+    }, [loggedInUserInfo?.userData?.$id, dispatch]);
 
     return (
-        <div className="w-full py-8">
+        <div className="w-full py-8 bg-(--bg) text-(--text) min-h-screen">
             <Container>
                 <div className="flex flex-wrap gap-4">
                     {posts && posts.length !== 0 ?
@@ -39,7 +49,10 @@ const YourPosts = () => {
                         :
                         <div className="w-full h-full mid">
                             <span className="text-3xl font-bold">
-                                You dont have any post yet || <Link className="underline hover:no-underline text-blue-700" to={"/add-post"}>Post your first post</Link>
+                                You dont have any post yet ||
+                                <Link className="underline hover:no-underline text-(--primary)" to={"/add-post"}>
+                                    Post your first post
+                                </Link>
                             </span>
                         </div>
                     }

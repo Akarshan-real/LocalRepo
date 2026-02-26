@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
 const ThemeController = () => {
-
     const theme = useSelector((state: any) => state.ux.theme);
 
     useEffect(() => {
@@ -10,7 +9,8 @@ const ThemeController = () => {
 
         if (theme === "dark") {
             root.classList.add("dark");
-        } else {
+        }
+        else {
             root.classList.remove("dark");
         };
 

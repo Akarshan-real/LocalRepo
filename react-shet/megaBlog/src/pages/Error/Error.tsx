@@ -5,11 +5,11 @@ const Error = () => {
 
     if (isRouteErrorResponse(error)) {
         return (
-            <div className="h-screen flex flex-col justify-center items-center">
+            <div className="min-h-screen bg-(--bg) text-(--text) flex flex-col justify-center items-center">
                 <h1 className="text-5xl font-bold">
                     {error.status} - {error.statusText}
                 </h1>
-                <p className="mt-4 text-gray-500">
+                <p className="mt-4 text-(--text-muted)">
                     {error.data || "Something went wrong"}
                 </p>
             </div>
@@ -18,7 +18,7 @@ const Error = () => {
 
     return (
         <div className="h-screen flex justify-center items-center">
-            <h1 className="text-4xl font-bold">
+            <h1 className="text-5xl font-bold text-(--primary)">
                 Unexpected Error Occurred
             </h1>
         </div>

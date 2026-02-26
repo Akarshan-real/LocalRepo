@@ -1,15 +1,21 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { LogoutButton, Container, Logo } from '../index';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { setTheme } from '../../store/uxSlice';
+import ThemeButton from './ThemeButton';
+import { NavLink } from 'react-router-dom';
 
 const Header = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const theme = useSelector((state: any) => state.ux.theme);
   const authStatus = useSelector((x: any) => x.auth.status);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+    `
+    px-6 py-2 rounded-full whitespace-nowrap border transition-all duration-300 ${isActive
+      ? "bg-(--primary) text-white border-(--primary)"
+      : "text-(--text) border-transparent hover:border-(--primary) hover:text-(--primary)"
+    }
+    `;
 
   const navItems = [
     { name: "Home", slug: "/", active: true },
@@ -19,15 +25,6 @@ const Header = () => {
     { name: "All posts", slug: "/all-posts", active: authStatus },
     { name: "Add Post", slug: "/add-post", active: authStatus }
   ];
-
-  const themeChange = () => {
-    if (theme === "dark") {
-      dispatch(setTheme("light"));
-    }
-    else {
-      dispatch(setTheme("dark"));
-    }
-  };
 
   return (
     <header className="py-3 shadow bg-(--surface) text-(--text)">
@@ -40,26 +37,21 @@ const Header = () => {
           </Link>
 
           <div className="hidden md:block">
-            <ul className="flex gap-2">
+            <ul className="flex gap-2 mid">
               {navItems.map((item) =>
                 item.active ? (
                   <li key={item.name} className="shrink-0">
-                    <button
-                      className="inline-block whitespace-nowrap px-6 py-2 rounded-full transition hover:bg-(--surface) cursor-pointer"
-                      onClick={() => navigate(item.slug)}
+                    <NavLink
+                      className={navLinkClass}
+                      to={item.slug}
                     >
                       {item.name}
-                    </button>
+                    </NavLink>
                   </li>
                 ) : null
               )}
               <li className="shrink-0">
-                <button
-                  onClick={themeChange}
-                  className="px-4 py-2 rounded-full transition bg-(--primary) text-white hover:bg-(--primary-hover)"
-                >
-                  {theme === "dark" ? "☀ Light" : "🌙 Dark"}
-                </button>
+                <ThemeButton />
               </li>
               {authStatus && (
                 <li>
@@ -84,25 +76,18 @@ const Header = () => {
               {navItems.map((item) =>
                 item.active ? (
                   <li key={item.name}>
-                    <button
-                      className="w-full text-left px-4 py-2 bg-(--card) text-(--text) border border-(--border) rounded-lg cursor-pointer"
-                      onClick={() => {
-                        navigate(item.slug);
-                        setMenuOpen(false);
-                      }}
+                    <NavLink
+                      to={item.slug}
+                      onClick={() => setMenuOpen(false)}
+                      className={navLinkClass}
                     >
                       {item.name}
-                    </button>
+                    </NavLink>
                   </li>
                 ) : null
               )}
               <li className="shrink-0">
-                <button
-                  onClick={themeChange}
-                  className="px-4 py-2 cursor-pointer rounded-full transition bg-(--primary) text-white hover:bg-(--primary-hover)"
-                >
-                  {theme === "dark" ? "☀ Light" : "🌙 Dark"}
-                </button>
+                <ThemeButton />
               </li>
               {authStatus && (
                 <li>
