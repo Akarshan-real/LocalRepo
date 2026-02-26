@@ -1,13 +1,15 @@
 import { useSelector } from 'react-redux';
 import { LogoutButton, Container, Logo } from '../index';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ThemeButton from './ThemeButton';
 import { NavLink } from 'react-router-dom';
 
 const Header = () => {
   const authStatus = useSelector((x: any) => x.auth.status);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [topBarHeight, setTopBarHeight] = useState<number>();
+  const ref = useRef(null);
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     `
@@ -15,7 +17,15 @@ const Header = () => {
       ? "bg-(--primary) text-white border-(--primary)"
       : "text-(--text) border-transparent hover:border-(--primary) hover:text-(--primary)"
     }
-    `;
+  `;
+
+  const mobileNavLinkClass = ({ isActive }: { isActive: boolean }) =>
+    `
+    px-6 py-2 rounded-full whitespace-nowrap border transition-all duration-300 ${isActive
+      ? "bg-(--primary) text-white border-(--primary)"
+      : "text-(--text) border-(--primary)"
+    }
+  `;
 
   const navItems = [
     { name: "Home", slug: "/", active: true },
@@ -25,6 +35,12 @@ const Header = () => {
     { name: "All posts", slug: "/all-posts", active: authStatus },
     { name: "Add Post", slug: "/add-post", active: authStatus }
   ];
+
+  useEffect(() => {
+    if (ref.current) {
+      setTopBarHeight((ref.current as HTMLElement).offsetHeight+80);
+    }
+  }, []);
 
   return (
     <header className="py-3 shadow bg-(--surface) text-(--text)">
@@ -62,7 +78,7 @@ const Header = () => {
           </div>
 
           <button
-            className="md:hidden text-(--text) text-2xl cursor-pointer"
+            className="md:hidden px-4 text-(--text) text-2xl cursor-pointer"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             ☰
@@ -70,16 +86,22 @@ const Header = () => {
 
         </nav>
 
-        {menuOpen && (
-          <div className="md:hidden mt-3">
-            <ul className="flex flex-col gap-2">
+
+        <div
+          style={{
+            maxHeight: menuOpen ? `${topBarHeight}px` : '0px',
+          }}
+          className="md:hidden overflow-hidden transition-all duration-350 ease-in-out"
+        >
+          <div className="mt-6 pb-4" id="topBar" ref={ref}>
+            <ul className="flex flex-col gap-8">
               {navItems.map((item) =>
                 item.active ? (
-                  <li key={item.name}>
+                  <li key={item.name} className='text-xl'>
                     <NavLink
                       to={item.slug}
                       onClick={() => setMenuOpen(false)}
-                      className={navLinkClass}
+                      className={mobileNavLinkClass}
                     >
                       {item.name}
                     </NavLink>
@@ -96,7 +118,8 @@ const Header = () => {
               )}
             </ul>
           </div>
-        )}
+        </div>
+
 
       </Container>
     </header>

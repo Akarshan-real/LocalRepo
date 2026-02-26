@@ -7,7 +7,7 @@ const PrevPostsEdit = ({ className = "", suggestedtext = "Edit your previous pos
 
     return (
         <div className={`w-full flex flex-wrap gap-4 ${className}`}>
-            <div className="py-2 px-4 text-white bg-gray-800 rounded-lg">
+            <div className="py-2 px-4 bg-(--surface) text-(--text-muted) border border-(--border) rounded-lg">
                 <span>{suggestedtext}</span>
             </div>
             {userSlugs
@@ -16,7 +16,7 @@ const PrevPostsEdit = ({ className = "", suggestedtext = "Edit your previous pos
                     <Link
                         key={post}
                         to={`/edit-post/${post}`}
-                        className="outline-1 outline-black hover:bg-slate-200 transition-colors ease-in-out duration-150 bg-white px-4 py-2 rounded-lg"
+                        className="px-4 py-2 rounded-lg bg-(--card) text-(--text) border border-(--border) transition-all duration-200 hover:bg-(--surface) hover:text-(--primary) hover:border-(--primary)"
                     >
                         {slugToNormal(post)}
                     </Link>
