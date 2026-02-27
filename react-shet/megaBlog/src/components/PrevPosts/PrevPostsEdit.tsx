@@ -9,7 +9,7 @@ const PrevPostsEdit =
     let visibleIndex = 0;
     
     return (
-        <div className={`w-full flex flex-wrap items-center gap-4 ${className}`}>
+        <div className={`w-full flex flex-wrap gap-y-6 items-center gap-4 ${className}`}>
             <div className="py-2 px-4 bg-(--surface) text-(--text-muted) border border-(--border) rounded-lg">
                 <span>{suggestedtext}</span>
             </div>

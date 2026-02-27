@@ -7,7 +7,7 @@ const Addpost = () => {
         <div className="py-8 min-h-screen bg-(--bg) text-(--text)">
             <Container>
                 <PostForm />
-                {userSlugs.length > 0 && <PrevPostsEdit className="mt-8 ml-2"/>}
+                {userSlugs.length > 0 && <PrevPostsEdit className="mt-8 ml-0 md:ml-2"/>}
             </Container>
         </div>
     );

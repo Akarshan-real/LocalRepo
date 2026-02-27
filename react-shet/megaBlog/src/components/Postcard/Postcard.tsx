@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import newService from '../../appwrite/config';
 import { type AppWriteTableType } from '../../Types/Table.type';
-
+import { useMemo } from 'react';
 
 const PostCard = ({ $id, title, featuredImage }: Pick<AppWriteTableType, "$id" | "title" | "featuredImage">) => {
-    return (
+    return useMemo(() => (
         <Link to={`/post/${$id}`} className='group'>
             <div className='w-full bg-(--card) border border-(--border) rounded-xl p-4 transition hover:bg-(--surface)'>
                 <div className='w-full aspect-video mb-4 overflow-hidden rounded-xl'>
@@ -19,7 +19,7 @@ const PostCard = ({ $id, title, featuredImage }: Pick<AppWriteTableType, "$id" |
                 </h2>
             </div>
         </Link>
-    )
-}
+    ), [$id, title, featuredImage]);
+};
 
 export default PostCard;

@@ -5,34 +5,25 @@ import type { AppWriteTableType } from "../../Types/Table.type";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/uxSlice";
 import { Link } from "react-router-dom";
+import { heightOfHeaderAndFooter } from "../../Helper/Function";
 
 const Home = () => {
     const [posts, setPosts] = useState<AppWriteTableType[]>([]);
     const [totalHeight, setTotalHeight] = useState<number>(0);
 
-    useEffect(() => {
-        const calculate = () => {
-            const footer = document.querySelector("footer");
-            const header = document.querySelector("header");
-
-            const footerHeight = footer ? (footer as HTMLElement).offsetHeight : 0;
-            const headerHeight = header ? (header as HTMLElement).offsetHeight : 0;
-
-            setTotalHeight(footerHeight + headerHeight);
-        };
-
-        setTimeout(calculate, 100);
-        window.addEventListener("resize", calculate);
-        return () => window.removeEventListener("resize", calculate);
-    }, []);
-
-
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        const handleResize = () => setTotalHeight(heightOfHeaderAndFooter());
+        window.addEventListener("resize",handleResize);
+        return () => window.removeEventListener("resize",handleResize);
+    }, []);
 
     useEffect(() => {
         const hehe = async () => {
             try {
                 dispatch(setLoading(true));
+                setTotalHeight(heightOfHeaderAndFooter())
                 const response = await newService.getPosts([]);
 
                 if (response) {
@@ -46,7 +37,7 @@ const Home = () => {
             };
         };
         hehe();
-    }, [dispatch]);
+    }, []);
 
     if (posts.length > 0) {
         return (

@@ -7,8 +7,9 @@ import type { AppWriteTableType } from "../../Types/Table.type";
 import { setLoading } from "../../store/uxSlice";
 
 const YourPosts = () => {
-    const loggedInUserInfo = useSelector((state: any) => state.auth);
     const [posts, setPosts] = useState<AppWriteTableType[] | null>([]);
+    const loggedInUserInfo = useSelector((state: any) => state.auth);
+    
     const dispatch = useDispatch();
 
     useEffect(() => {
