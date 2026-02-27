@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import newService from "../../appwrite/config"
-import { Container, PostCard } from "../../components/index"
+import { Container, PostCard, ScrollReveal } from "../../components/index"
 import type { AppWriteTableType } from "../../Types/Table.type";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../store/uxSlice";
@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
     const [posts, setPosts] = useState<AppWriteTableType[]>([]);
-    const [totalHeight, setTotalHeight] = useState(500);
+    const [totalHeight, setTotalHeight] = useState<number>(0);
 
     useEffect(() => {
         const calculate = () => {
@@ -54,11 +54,11 @@ const Home = () => {
                 <Container>
                     <div className="flex flex-wrap gap-4">
                         {posts.map((post) => (
-                            <div key={post.$id}>
-                                <PostCard
-                                    {...post}
-                                />
-                            </div>
+                            <ScrollReveal key={post.$id} delay={0.1}>
+                                    <PostCard
+                                        {...post}
+                                    />
+                            </ScrollReveal>
                         ))}
                     </div>
                 </Container>

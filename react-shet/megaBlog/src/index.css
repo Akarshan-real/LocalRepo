@@ -2,23 +2,23 @@
 
 :root {
   /* Light */
-  --light-bg: #F6F8FC;
-  --light-surface: #E9EDF5;
+  --light-bg: #F5F7FF;
+  --light-surface: #EEF2FF;
   --light-card: #FFFFFF;
 
-  --light-primary: #5B6EF5;
-  --light-primary-hover: #4959D6;
+  --light-primary: #4F46E5;
+  --light-primary-hover: #4338CA;
 
   --light-danger: #ef4444;
   --light-danger-hover: #dc2626;
 
-  --light-accent: #F38BA8;
-  --light-accent-hover: #E0658C;
+  --light-accent: #7C3AED;
+  --light-accent-hover: #6D28D9;
 
-  --light-text: #1A2238;
-  --light-text-muted: #64748B;
+  --light-text: #1E1B4B;
+  --light-text-muted: #6366F1;
 
-  --light-border: #D6DAE6;
+  --light-border: #E0E7FF;
 
   /* Dark */
 
@@ -101,21 +101,18 @@ select {
   -moz-appearance: none;
   appearance: none;
 }
+
 select::-ms-expand {
   display: none;
 }
 
 /* Scroll bar */
-/* ============================= */
-/* GLOBAL CUSTOM SCROLLBAR */
-/* ============================= */
 
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--primary) var(--surface);
 }
 
-/* Chrome / Edge / Safari */
 *::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -139,4 +136,13 @@ select::-ms-expand {
 
 *::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+/* Input Field */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px var(--surface) inset !important;
+  -webkit-text-fill-color: var(--text) !important;
+  caret-color: var(--text);
 }

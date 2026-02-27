@@ -15,6 +15,7 @@ import PostForm from "./Post-form/PostForm";
 import OverlayLoader from "./Loader/OverlayLoader";
 import PrevPostsEdit from "./PrevPosts/PrevPostsEdit";
 import ThemeController from "./ThemeController/ThemeController";
+import ScrollReveal from "./ScrollReveal/ScrollReveal";
 
 export {
     Header,
@@ -33,5 +34,6 @@ export {
     PostForm,
     OverlayLoader,
     PrevPostsEdit,
-    ThemeController
+    ThemeController,
+    ScrollReveal
 };

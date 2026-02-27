@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import newService from '../../appwrite/config';
 import { type AppWriteTableType } from '../../Types/Table.type';
 
+
 const PostCard = ({ $id, title, featuredImage }: Pick<AppWriteTableType, "$id" | "title" | "featuredImage">) => {
     return (
         <Link to={`/post/${$id}`} className='group'>

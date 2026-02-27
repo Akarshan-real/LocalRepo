@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import newService from "../../appwrite/config";
-import { Container, PostCard } from "../../components/index";
+import { Container, PostCard , ScrollReveal } from "../../components/index";
 import { Link } from "react-router-dom";
 import type { AppWriteTableType } from "../../Types/Table.type";
 import { setLoading } from "../../store/uxSlice";
@@ -39,12 +39,12 @@ const YourPosts = () => {
             <Container>
                 <div className="flex flex-wrap gap-4">
                     {posts && posts.length !== 0 ?
-                        posts.map((post: any) => (
-                            <div key={post.$id}>
+                        posts.map((post: any,index) => (
+                            <ScrollReveal delay={index*0.2} key={post.$id}>
                                 <PostCard
                                     {...post}
                                 />
-                            </div>
+                            </ScrollReveal>
                         ))
                         :
                         <div className="w-full h-full mid">

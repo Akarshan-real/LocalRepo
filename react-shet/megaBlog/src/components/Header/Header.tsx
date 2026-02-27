@@ -21,7 +21,7 @@ const Header = () => {
 
   const mobileNavLinkClass = ({ isActive }: { isActive: boolean }) =>
     `
-    px-6 py-2 rounded-full whitespace-nowrap border transition-all duration-300 ${isActive
+    block px-6 py-2 mid rounded-full border transition-all duration-300 ${isActive
       ? "bg-(--primary) text-white border-(--primary)"
       : "text-(--text) border-(--primary)"
     }
@@ -38,7 +38,7 @@ const Header = () => {
 
   useEffect(() => {
     if (ref.current) {
-      setTopBarHeight((ref.current as HTMLElement).offsetHeight+80);
+      setTopBarHeight((ref.current as HTMLElement).offsetHeight+160);
     }
   }, []);
 
@@ -89,11 +89,11 @@ const Header = () => {
 
         <div
           style={{
-            maxHeight: menuOpen ? `${topBarHeight}px` : '0px',
+            maxHeight: menuOpen ? `${topBarHeight}px` : '0px'
           }}
           className="md:hidden overflow-hidden transition-all duration-350 ease-in-out"
         >
-          <div className="mt-6 pb-4" id="topBar" ref={ref}>
+          <div className="mt-6 pb-4 flex justify-between" id="topBar" ref={ref}>
             <ul className="flex flex-col gap-8">
               {navItems.map((item) =>
                 item.active ? (
@@ -108,11 +108,13 @@ const Header = () => {
                   </li>
                 ) : null
               )}
-              <li className="shrink-0">
+            </ul>
+            <ul className='flex flex-col gap-8 items-end'>
+              <li className="shrink-0 text-xl">
                 <ThemeButton />
               </li>
               {authStatus && (
-                <li>
+                <li className='text-xl'>
                   <LogoutButton />
                 </li>
               )}

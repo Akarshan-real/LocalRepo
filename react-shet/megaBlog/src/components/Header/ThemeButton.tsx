@@ -17,7 +17,7 @@ const ThemeButton = () => {
     return (
         <button
             onClick={themeChange}
-            className="px-4 py-2 cursor-pointer rounded-full transition bg-(--primary) text-white hover:bg-(--primary-hover)"
+            className="px-5 py-2 cursor-pointer rounded-full transition bg-(--primary) text-white hover:bg-(--primary-hover)"
         >
             {theme === "dark" ? "☀ Light" : "🌙 Dark"}
         </button>
