@@ -53,7 +53,6 @@ const Login = () => {
         }
         catch (error: any) {
             setError(error.message);
-            navigate("/");
         }
         finally {
             dispatch(setLoading(false));
