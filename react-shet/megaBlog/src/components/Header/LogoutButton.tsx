@@ -17,6 +17,7 @@ const LogoutButton = () => {
         }
         finally {
             dispatch(setLoading(false));
+            window.location.reload();
         };
     };
 

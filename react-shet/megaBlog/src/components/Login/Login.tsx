@@ -24,7 +24,6 @@ const Login = () => {
             }
             catch (error) {
                 console.log(error);
-                navigate("/");
             }
             finally {
                 dispatch(setLoading(false));
@@ -78,7 +77,7 @@ const Login = () => {
                     </Link>
                 </p>
 
-                {error && <p className="text-(--danger) mt-4 text-center">{error}</p>}
+                {error && <p className="text-(--danger) my-8 text-center">{error}</p>}
                 <form onSubmit={handleSubmit(login)} className="mt-4">
                     <div className="space-y-5">
                         <Input
