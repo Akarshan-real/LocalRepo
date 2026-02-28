@@ -7,6 +7,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.tsx';
 import { Error, Allposts, Home, Login, Post, Addpost, Editpost, Signup, YourPosts } from "../src/pages/index.ts";
 import { Protected } from "../src/components/index.ts";
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor } from "./store/store.ts";
 
 const router = createBrowserRouter([{
   path: "/",
@@ -83,6 +85,8 @@ if (savedTheme === "dark") {
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <PersistGate loading={null} persistor={persistor}>
+      <RouterProvider router={router} />
+    </PersistGate>
   </Provider>
 )
