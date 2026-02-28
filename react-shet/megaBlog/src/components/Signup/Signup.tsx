@@ -25,7 +25,6 @@ const Signup = () => {
                 
             } catch (error) {
                 console.log(error);
-                navigate("/");
             }
             finally {
                 dispatch(setLoading(false));

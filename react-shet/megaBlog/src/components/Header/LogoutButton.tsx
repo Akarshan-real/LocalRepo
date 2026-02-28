@@ -9,16 +9,16 @@ const LogoutButton = () => {
     const logOutHandler = async () => {
         try {
             dispatch(setLoading(true));
+
             await authService.logout();
+
             dispatch(logout());
+            window.location.replace("/");
         }
         catch (error) {
             console.log("Error : ", error);
-        }
-        finally {
             dispatch(setLoading(false));
-            window.location.reload();
-        };
+        }
     };
 
     return (
