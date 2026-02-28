@@ -4,7 +4,7 @@ import authService from './appwrite/auth';
 import { login, logout } from './store/authSlice';
 import { Footer, Header, OverlayLoader, ThemeController } from './components';
 import { Outlet } from 'react-router-dom';
-import { setAuthChecked, setLoading } from './store/uxSlice';
+import { setLoading } from './store/uxSlice';
 import newService from './appwrite/config';
 import { setUserSlugs } from './store/postSlice';
 
@@ -34,7 +34,6 @@ function App() {
       }
       finally {
         dispatch(setLoading(false));
-        dispatch(setAuthChecked(true))
       };
     };
 
