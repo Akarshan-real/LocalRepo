@@ -1,6 +1,7 @@
-import { useEffect, useState, type ReactNode } from 'react'
-import { useSelector } from 'react-redux';
+import { useEffect, type ReactNode } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setLoading } from '../../store/uxSlice';
 
 type Allowable = {
     children: ReactNode,
@@ -9,24 +10,24 @@ type Allowable = {
 
 const Protected = ({ children, authentication = true }: Allowable) => {
     const navigate = useNavigate();
-    const authStatus = useSelector((state : any) => state.auth.status);
-    const [loader, setLoader] = useState(true);
+    const dispatch = useDispatch();
+    const authStatus = useSelector((state: any) => state.auth.status);
+    const authChecked = useSelector((state: any) => state.ux.authChecked);
 
     useEffect(() => {
-        setLoader(true);
+        if (!authChecked) return;
+
+        dispatch(setLoading(true));
         if (authentication && authStatus !== authentication) {
             navigate("/login");
         }
         else if (!authentication && authStatus !== authentication) {
             navigate("/");
         }
-        setLoader(false);
-    }, [authStatus,navigate,authentication])
-    
-    if (loader) {
-        return (<><h1>Loading...</h1></>);
-    };
+        dispatch(setLoading(false));
+    }, [authStatus, navigate, authentication, authChecked]);
+
     return (<>{children}</>);
 }
 
-export default Protected
+export default Protected;
