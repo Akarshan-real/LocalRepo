@@ -1,21 +1,10 @@
-import { z } from "zod";
+const env = {
+  mongoDbUri: String(process.env.MONGO_DB_URI),
+  mailTrapApiKey: String(process.env.MAILTRAP_API_KEY),
+  domain: String(process.env.DOMAIN),
+  NODEMAILER_USER : String(process.env.NODEMAILER_USER),
+  NODEMAILER_PASS : String(process.env.NODEMAILER_PASS),
+  NODEMAILER_PORT : String(process.env.NODEMAILER_POR)
+}
 
-const getEnv = <T extends string>(...keys: T[]) => {
-  const shape = {} as Record<T, z.ZodString>;
-
-  keys.forEach((key) => {
-    shape[key] = z.string().min(1);
-  });
-
-  return z.object(shape).parse(process.env);
-};
-
-export default getEnv(
-  "MONGO_DB_URI",
-  "TOKEN_SECRET",
-  "DOMAIN",
-  "MAILTRAP_API_KEY",
-  "NODEMAILER_USER",
-  "NODEMAILER_PASS",
-  "NODEMAILER_PORT"
-);
+export default env;

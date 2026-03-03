@@ -8,7 +8,7 @@ export const dbConnect =  async () => {
         return;
     }
     try {
-        await mongoose.connect(serverSecret.MONGO_DB_URI);
+        await mongoose.connect(serverSecret.mongoDbUri);
 
         const connection = mongoose.connection;
 

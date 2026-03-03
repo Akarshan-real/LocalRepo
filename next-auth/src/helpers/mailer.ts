@@ -1,7 +1,6 @@
 import User from "@/models/user.model";
 import bcryptjs from "bcryptjs";
 import nodemailer from "nodemailer";
-import { MailtrapTransport } from "mailtrap";
 import serverSecret from "@/env/server";
 
 export const sendEmail = async ({ email, emailType, userId }: { email: string, emailType: "VERIFY" | "RESET", userId: string }) => {
@@ -37,17 +36,18 @@ export const sendEmail = async ({ email, emailType, userId }: { email: string, e
         // ); API OPTION
 
         const mailOptions = {
-            from: 'igotbones@gmail.com',
+            from: 'home.shnauli@gmail.com',
             to: email,
             subject: emailType === "VERIFY" ? "Verify your email" : "Reset your password",
-            html: `<p>Click <a href="${serverSecret.DOMAIN}/verifyemail?token=${hashedToken}">here</a> to ${emailType === "VERIFY" ? "verify your email" : "reset your password"}
-            or copy and paste the link below in your browser. <br> ${serverSecret.DOMAIN}/verifyemail?token=${hashedToken}
+            html: `<p>Click <a href="${serverSecret.domain}/verifyemail?token=${hashedToken}">here</a> to ${emailType === "VERIFY" ? "verify your email" : "reset your password"}
+            or copy and paste the link below in your browser. <br> ${serverSecret.domain}/verifyemail?token=${hashedToken}
             </p>`,
         };
 
         const mailResponse = await transport.sendMail(mailOptions);
-        return mailOptions;
+        return mailResponse;
     } catch (error: any) {
-        throw new Error(error.message)
+        console.error("MAILER ERROR FULL:", error);
+        throw error;
     }
 };
