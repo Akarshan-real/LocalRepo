@@ -6,7 +6,7 @@ const getENV = (key: string): string => {
     return "";
   };
 
-  return value;
+  return String(value);
 };
 
 const env = {
