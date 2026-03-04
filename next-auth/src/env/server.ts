@@ -1,10 +1,22 @@
+const getENV = (key: string): string => {
+  const value = process.env[key];
+
+  if (!value) {
+    console.log("Something is wrong with env :: ",key);
+    return "";
+  };
+
+  return value;
+};
+
 const env = {
-  mongoDbUri: String(process.env.MONGO_DB_URI),
-  mailTrapApiKey: String(process.env.MAILTRAP_API_KEY),
-  domain: String(process.env.DOMAIN),
-  NODEMAILER_USER : String(process.env.NODEMAILER_USER),
-  NODEMAILER_PASS : String(process.env.NODEMAILER_PASS),
-  NODEMAILER_PORT : String(process.env.NODEMAILER_POR)
-}
+  mongoDbUri: getENV("MONGO_DB_URI"),
+  mailTrapApiKey: getENV("MAILTRAP_API_KEY"),
+  domain: getENV("DOMAIN"),
+  NODEMAILER_USER: getENV("NODEMAILER_USER"),
+  NODEMAILER_PASS: getENV("NODEMAILER_PASS"),
+  NODEMAILER_PORT: getENV("NODEMAILER_PORT"),
+  secretToken : getENV("TOKEN_SECRET")
+};
 
 export default env;

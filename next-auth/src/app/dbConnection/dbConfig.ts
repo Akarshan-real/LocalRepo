@@ -3,10 +3,12 @@ import serverSecret from "@/env/server";
 
 export const dbConnect =  async () => {
     const checker = mongoose.connection.readyState;
-    if ([1,2].includes(checker)) {
+
+    if (checker === 1 || checker === 2) {
         console.log(`${checker === 1 ? "DB already connected" : "DB connecting"}`);
         return;
-    }
+    };
+
     try {
         await mongoose.connect(serverSecret.mongoDbUri);
 

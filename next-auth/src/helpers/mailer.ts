@@ -2,10 +2,11 @@ import User from "@/models/user.model";
 import bcryptjs from "bcryptjs";
 import nodemailer from "nodemailer";
 import serverSecret from "@/env/server";
+import { Types } from "mongoose";
 
-export const sendEmail = async ({ email, emailType, userId }: { email: string, emailType: "VERIFY" | "RESET", userId: string }) => {
+export const sendEmail = async ({ email, emailType, userId }: { email: string, emailType: "VERIFY" | "RESET", userId: string | Types.ObjectId}) => {
     try {
-        const hashedToken = await bcryptjs.hash(userId, 10);
+        const hashedToken = await bcryptjs.hash(String(userId), 10);
 
         if (emailType === "VERIFY") {
             await User.findByIdAndUpdate(userId, {
@@ -49,5 +50,5 @@ export const sendEmail = async ({ email, emailType, userId }: { email: string, e
     } catch (error: any) {
         console.error("MAILER ERROR FULL:", error);
         throw error;
-    }
+    };
 };

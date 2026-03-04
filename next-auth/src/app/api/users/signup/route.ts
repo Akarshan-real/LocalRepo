@@ -4,10 +4,9 @@ import User from "@/models/user.model";
 import bcryptjs from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 
-dbConnect();
-
 export const POST = async (req: NextRequest) => {
     try {
+        dbConnect();
         const reqBody = await req.json();
         const { username, email, password } = reqBody;
 
@@ -35,12 +34,14 @@ export const POST = async (req: NextRequest) => {
         await sendEmail({ email, emailType: "VERIFY", userId: savedUser._id });
 
         return NextResponse.json({
-            message : "User registered successfully",
-            success : true,
+            message: "User registered successfully",
+            success: true,
             savedUser
         });
 
     } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json({
+            error: error.message
+        }, { status: 500 });
     };
 };
