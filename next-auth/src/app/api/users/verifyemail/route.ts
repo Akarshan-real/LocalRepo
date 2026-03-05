@@ -4,12 +4,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
     try {
-        dbConnect();
+        await dbConnect();
 
         const reqBody = await req.json();
-        const { token } = reqBody._id;
 
-        const user = await User.findOne({ verifyToken: token, verifyTokenExpiry: { $gt: Date.now() } });
+        const { token } = reqBody;
+
+        const user = await User.findOne({
+            verifyToken: token,
+            verifyTokenExpiry: { $gt: Date.now() },
+            isVerified: false
+        });
 
         if (!user) {
             return NextResponse.json({
@@ -30,7 +35,7 @@ export const POST = async (req: NextRequest) => {
 
     } catch (error: any) {
         return NextResponse.json({
-            error: error
+            error: error.message
         }, { status: 500 });
-    }
-}
+    };
+};

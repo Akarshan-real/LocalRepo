@@ -6,16 +6,18 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
     try {
-        dbConnect();
+        await dbConnect();
         const reqBody = await req.json();
         const { username, email, password } = reqBody;
 
-        console.log(reqBody);
+        console.log("reqBody : ",reqBody);
 
         const user = await User.findOne({ email });
 
         if (user) {
-            return NextResponse.json({ error: "User already exists" }, { status: 400 });
+            return NextResponse.json({
+                error: "User already exists"
+            }, { status: 400 });
         };
 
         const hashedPassword = await bcryptjs.hash(password, 10);
@@ -30,8 +32,7 @@ export const POST = async (req: NextRequest) => {
         console.log(savedUser);
 
         //send verify email
-
-        await sendEmail({ email, emailType: "VERIFY", userId: savedUser._id });
+        await sendEmail({ email : email, emailType: "VERIFY", userId: savedUser._id });
 
         return NextResponse.json({
             message: "User registered successfully",
