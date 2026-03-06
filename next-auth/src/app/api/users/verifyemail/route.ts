@@ -18,7 +18,8 @@ export const POST = async (req: NextRequest) => {
 
         if (!user) {
             return NextResponse.json({
-                error: "Invalid token , user not found"
+                error: "Invalid token , user not found",
+                success : false
             }, { status: 400 });
         };
 
@@ -35,7 +36,8 @@ export const POST = async (req: NextRequest) => {
 
     } catch (error: any) {
         return NextResponse.json({
-            error: error.message
+            error: error.message,
+            success : false
         }, { status: 500 });
     };
 };
