@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
-import { ReactNode, useEffect, useRef, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react';
 
 type Card = {
     description: string;
@@ -21,7 +21,7 @@ const cards: Card[] = [
         ctaLink: "https://ui.aceternity.com/templates",
         content: () => {
             return (
-                <p className="text-[10px] text-neutral-500">
+                <p className="text-lg text-neutral-500">
                     Lana Del Rey, an iconic American singer-songwriter known for her
                     melancholic cinematic style. Her music blends vintage aesthetics,
                     dreamy soundscapes, and introspective storytelling.
@@ -38,7 +38,7 @@ const cards: Card[] = [
         ctaLink: "https://spotify.com",
         content: () => {
             return (
-                <p className="text-[10px] text-neutral-500">
+                <p className="text-lg text-neutral-500">
                     The Weeknd became globally famous with synthwave-inspired hits like
                     Blinding Lights. His music mixes retro vibes with modern pop and R&B.
                 </p>
@@ -54,7 +54,7 @@ const cards: Card[] = [
         ctaLink: "https://spotify.com",
         content: () => {
             return (
-                <p className="text-[10px] text-neutral-500">
+                <p className="text-lg text-neutral-500">
                     Daft Punk revolutionized electronic music with their futuristic
                     sound, robotic personas, and iconic tracks like Get Lucky.
                 </p>
@@ -70,7 +70,7 @@ const cards: Card[] = [
         ctaLink: "https://spotify.com",
         content: () => {
             return (
-                <p className="text-[10px] text-neutral-500">
+                <p className="text-lg text-neutral-500">
                     Billie Eilish gained massive popularity with her whispery vocals,
                     dark pop production, and unconventional style.
                 </p>
@@ -97,9 +97,6 @@ const useOutsideClick = (callback: () => void) => {
     return ref;
 };
 
-
-
-
 const Card = () => {
     const ref = useOutsideClick(() => {
         if (currentCard) {
@@ -110,11 +107,24 @@ const Card = () => {
     const [currentCard, setCurrentCard] = useState<Card | null>(null);
 
     return (
-        <div className='w-full min-h-screen py-10 bg-gray-400'>
-            {currentCard &&
-                <div className='fixed inset-0 z-10 w-full h-full bg-black/50 backdrop-blur-sm'>
-                </div>
-            }
+        <div className='w-full min-h-screen py-10 relative bg-gray-400'>
+            <AnimatePresence>
+                {currentCard &&
+                    <motion.div
+                        initial={{
+                            opacity: 0,
+                        }}
+                        animate={{
+                            opacity: 1,
+                        }}
+                        transition={{
+                            duration: 0.3
+                        }}
+                        className='fixed inset-0 z-10 w-full h-full bg-black/50 backdrop-blur-sm'
+                    >
+                    </motion.div>
+                }
+            </AnimatePresence>
 
             <AnimatePresence>
                 {currentCard &&
@@ -122,33 +132,50 @@ const Card = () => {
                         <motion.div
                             layoutId={`card-${currentCard.title}`}
                             ref={ref}
-                            className='fixed inset-0 z-20 flex flex-col items-center p-4 m-auto bg-white border w-80 h-150 rounded-2xl border-neutral-200'
+                            className='fixed inset-0 z-20 flex flex-col items-center p-4 m-auto bg-white border w-90 h-130 overflow-hidden rounded-2xl border-neutral-200'
                         >
                             <motion.img
                                 layoutId={`card-image-${currentCard.title}`}
                                 src={currentCard.src}
                                 alt={currentCard.title}
-                                className='h-70 aspect-square rounded-xl'
+                                className='w-full aspect-square rounded-xl'
                             />
                             <div className='flex flex-col items-start justify-between'>
                                 <div className='flex items-start justify-between w-full gap-2 py-4'>
                                     <div className='flex flex-col items-start gap-2'>
-                                        <motion.h2 layoutId={`card-title-${currentCard.title}`} className='text-xs font-bold tracking-tight text-black'>{currentCard.title}</motion.h2>
-                                        <motion.p layoutId={`card-description-${currentCard.title}`} className='text-[10px] text-neutral-500'>{currentCard.description}</motion.p>
+                                        <motion.h2 layoutId={`card-title-${currentCard.title}`} className='font-bold tracking-tight text-black text-md'>
+                                            {currentCard.title}
+                                        </motion.h2>
+                                        <motion.p layoutId={`card-description-${currentCard.title}`} className='text-lg text-neutral-500'>
+                                            {currentCard.description}
+                                        </motion.p>
                                     </div>
                                     <motion.div layoutId={`card-cta-${currentCard.title}`}>
-                                        <Link href={currentCard.ctaLink} className='px-2 py-1 text-xs text-white bg-green-500 rounded-full'>
+                                        <Link href={currentCard.ctaLink} className='px-5 py-2 text-xs text-white bg-green-500 rounded-full'>
                                             {currentCard.ctaText}
                                         </Link>
                                     </motion.div>
                                 </div>
-                                <div className='h-40 overflow-auto'>
+                                <motion.div
+                                    initial={{
+                                        opacity: 0,
+                                        filter: "blur(10px)",
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        filter: "blur(0px)",
+                                    }}
+                                    transition={{
+                                        delay: 0.25
+                                    }}
+                                    className='h-40 overflow-scroll pb-20 mask-[linear-gradient(to_top,transparent_20%,black_80%)]'
+                                >
                                     {currentCard.content()}
-                                </div>
+                                </motion.div>
                             </div>
                         </motion.div>
                     </>
-                };
+                }
             </AnimatePresence>
 
             <div className='flex flex-col max-w-lg gap-10 mx-auto'>
@@ -167,11 +194,17 @@ const Card = () => {
                                 className='h-14 aspect-square rounded-xl'
                             />
                             <div className='flex flex-col items-start gap-2'>
-                                <motion.h2 layoutId={`card-title-${card.title}`} className='text-xs font-bold tracking-tight text-black'>{card.title}</motion.h2>
-                                <motion.p layoutId={`card-description-${card.title}`} className='text-xs text-neutral-500'>{card.description}</motion.p>
+                                <motion.h2 layoutId={`card-title-${card.title}`} className='text-xs font-bold tracking-tight text-black'>
+                                    {card.title}
+                                </motion.h2>
+                                <motion.p layoutId={`card-description-${card.title}`} className='text-xs text-neutral-500'>
+                                    {card.description}
+                                </motion.p>
                             </div>
                         </div>
-                        <motion.div layoutId={`card-cta-${card.title}`} className='px-2 py-1 text-xs text-white bg-green-500 rounded-full'>{card.ctaText}</motion.div>
+                        <motion.div layoutId={`card-cta-${card.title}`} className='px-2 py-1 text-xs text-white bg-green-500 rounded-full'>
+                            {card.ctaText}
+                        </motion.div>
                     </motion.button>
                 ))}
             </div>
