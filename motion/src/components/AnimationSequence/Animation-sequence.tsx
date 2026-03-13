@@ -7,7 +7,7 @@ const AnimationSequence = async () => {
     const startAnimating = async () => {
         const sequence: AnimationSequence = [
             [".loader", {
-                width: "1.25rem",
+                // width: "1.25rem",
                 opacity: 1,
                 scale: 1
             }, { duration: 0.1 }],
@@ -23,20 +23,21 @@ const AnimationSequence = async () => {
             }, { duration: 0.1 }],
             ["button", {
                 width: "5rem",
-                borderRadius: "1000px",
+                borderRadius: "1000px"
             }, { duration: 0.3 }],
             ["button", {
                 background: "var(--color-green-500)",
                 scale: [1, 1.2, 0.8, 1],
             }, { duration: 0.5 }],
             [".check-icon", {
-                opacity: 1
-            }, { duration: 0.2 }],
+                opacity: [0,1]
+            }, { duration: 0.2 , at : 2.4}],
             [".check-icon path", {
                 pathLength: 1,
             }, { duration: 0.5 }],
         ];
-        animate(sequence);
+        await animate(sequence);
+
         // await animate(".loader", {
         //     width: "1.25rem",
         //     opacity: 1,
@@ -98,8 +99,9 @@ const AnimationSequence = async () => {
                 style={{
                     width: "30rem",
                 }}
-                className='h-20 gap-2 flex items-center justify-center font-medium text-white rounded-lg cursor-pointer bg-linear-to-r from-purple-500 via-violet-600 to-indigo-500'
+                className='flex items-center justify-center h-20 gap-2 font-medium text-white rounded-lg cursor-pointer bg-linear-to-r from-purple-500 via-violet-600 to-indigo-500'
             >
+                {/* Loader */}
                 <motion.svg
                     width="24"
                     height="24"
@@ -109,10 +111,11 @@ const AnimationSequence = async () => {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="loader h-5 w-5 text-white"
+                    className="w-5 h-5 text-white loader"
                     initial={{
-                        width: "0rem",
+                        // width: "0rem",
                         scale: 0,
+                        opacity: 0
                     }}
                 >
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -121,12 +124,13 @@ const AnimationSequence = async () => {
                 <span className='text'>Purchase now ($69)</span>
             </motion.button>
 
+            {/* Check Icon */}
             <motion.svg
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="#FFFFFF"
                 strokeWidth={3}
-                className="check-icon h-8 w-8 absolute inset-0 m-auto z-50 pointer-events-none"
+                className="absolute inset-0 z-50 w-8 h-8 m-auto pointer-events-none check-icon"
                 style={{
                     opacity: 0
                 }}
@@ -140,13 +144,6 @@ const AnimationSequence = async () => {
                     d="M5 13l4 4L19 7"
                 />
             </motion.svg>
-            {/* <motion.div
-                style={{
-                    opacity: 0,
-                    scale: 0
-                }}
-                className='spinning-circle h-20 w-20 rounded-full bg-green-500 absolute inset-0 m-auto'>
-            </motion.div> */}
         </div>
     )
 }
