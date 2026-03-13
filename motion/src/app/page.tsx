@@ -1,3 +1,4 @@
+"use client"
 import ContentPage from "@/components/Button/Button";
 // import Card from "@/components/Card/Card";
 import Layout from "@/components/Dashboard/Layout";
