@@ -1,0 +1,34 @@
+{
+    "name": "Interchange",
+    "description": "Play/Pause state change in a tab with state change in another tab",
+    "version": "1.0",
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "strorage"
+    ],
+    "host_permissions": [
+        "https://*.youtube.com/*",
+        "https://*.spotify.com/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://*.youtube.com/*",
+                "https://*.spotify.com/*"
+            ],
+            "js": [
+                "contentScript.js"
+            ]
+        }
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "manifest_version": 3,
+    "default_title": "Interchange",
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": "hello_extensions.png"
+    }
+}
