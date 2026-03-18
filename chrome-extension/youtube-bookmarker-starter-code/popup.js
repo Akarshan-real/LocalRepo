@@ -2,7 +2,18 @@ import { getActiveTabURL } from "./utils";;
 
 // adding a new bookmark row to the popup
 const addNewBookmark = (bookmarkElement, bookmark) => {
-    
+    const bookmarkTitleElement = document.createElement("div");
+    const newBookmarkElement = document.createElement("div");
+
+    bookmarkTitleElement.textContent = bookmark.desc;
+    bookmarkTitleElement.className = "bookmark-title";
+
+    newBookmarkElement.id = "bookmark-" + bookmark.time;
+    newBookmarkElement.className = "bookmark";
+    newBookmarkElement.setAttribute("timestamp", bookmark.time);
+
+    newBookmarkElement.appendChild(bookmarkTitleElement);
+    bookmarkElement.appendChild(newBookmarkElement);
 };
 
 const viewBookmarks = (currentVideoBookmarks = []) => {
@@ -25,7 +36,14 @@ const onPlay = e => { };
 
 const onDelete = e => { };
 
-const setBookmarkAttributes = () => { };
+const setBookmarkAttributes = (src, eventListner, controlParentElement) => {
+    const controlElement = document.createElement("img");
+
+    controlElement.src = "assets/" + src + ".png";
+    controlElement.title = src;
+    controlElement.addEventListener("click", eventListner);
+    controlParentElement.appendChild(controlElement);
+};
 
 document.addEventListener("DOMContentLoaded", async () => {
     const activeTabURL = await getActiveTabURL();
