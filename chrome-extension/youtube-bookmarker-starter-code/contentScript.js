@@ -9,13 +9,18 @@
         if (type === "NEW") {
             currentVideo = videoId;
             newVideoLoaded();
+        } else if (type === "PLAY") {
+            youtubePlayer.currentTime = value;
+        } else if (type === "DELETE") {
+            currentVideoBookmarks = currentVideoBookmarks.filter(b => b.time !== value);
+            chrome.storage.sync.set({ [currentVideo]})
         }
     });
 
     const fetchBookmarks = async () => {
         return new Promise((resolve) => {
             chrome.storage.sync.get(currentVideo, (data) => {
-                resolve(data[currentVideo] ? JSON.parse(data[currentVideo]) : []);
+                resolve(data[currentVideo] ? JSON.stringify(data[currentVideo]) : []);
             });
         });
     };
