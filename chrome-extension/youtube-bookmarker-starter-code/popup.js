@@ -1,4 +1,4 @@
-import { getActiveTabURL } from "./utils";;
+import { getActiveTabURL } from "./utils";
 
 // adding a new bookmark row to the popup
 const addNewBookmark = (bookmarkElement, bookmark) => {
@@ -8,15 +8,15 @@ const addNewBookmark = (bookmarkElement, bookmark) => {
 
     bookmarkTitleElement.textContent = bookmark.desc;
     bookmarkTitleElement.className = "bookmark-title";
-
     controlElement.className = "bookmark-controls";
+
+    setBookmarkAttributes("play", onPlay, controlElement);
+    setBookmarkAttributes("delete", onDelete, controlElement);
 
     newBookmarkElement.id = "bookmark-" + bookmark.time;
     newBookmarkElement.className = "bookmark";
     newBookmarkElement.setAttribute("timestamp", bookmark.time);
 
-    setBookmarkAttributes("play", onPlay, controlElement);
-    setBookmarkAttributes("delete", onDelete, controlElement);
 
     newBookmarkElement.appendChild(bookmarkTitleElement);
     newBookmarkElement.appendChild(controlElement);
@@ -24,13 +24,12 @@ const addNewBookmark = (bookmarkElement, bookmark) => {
 };
 
 const viewBookmarks = (currentVideoBookmarks = []) => {
-    const bookmarkElement = document.getElementsByClassName("bookmark-list")[0];
+    const bookmarkElement = document.getElementsByClassName("bookmarks")[0];
     bookmarkElement.innerHTML = "";
 
     if (currentVideoBookmarks.length > 0) {
         for (let i = 0; i < currentVideoBookmarks.length; i++) {
             const bookmark = currentVideoBookmarks[i];
-
             addNewBookmark(bookmarkElement, bookmark);
         };
     }
@@ -42,10 +41,9 @@ const viewBookmarks = (currentVideoBookmarks = []) => {
 const onPlay = async e => {
     const timestamp = e.target.parentNode.parentNode.getAttribute("timestamp");
     const activetab = await getActiveTabURL();
-    0
     chrome.tabs.sendMessage(activetab.id, {
         type: "PLAY",
-        value: bookmarktime
+        value: parseFloat(timestamp)
     });
 };
 
@@ -53,17 +51,15 @@ const onDelete = async e => {
     const activeTab = await getActiveTabURL();
     const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp");
 
-    const bookmarkElementToDelete = document.getElementById("bookmark-" + bookmarkTime);
-    bookmarkElementToDelete.parentNode.removeChild(bookmarkElementToDelete);
+    document.getElementById("bookmark-" + bookmarkTime)?.remove();
 
     chrome.tabs.sendMessage(activeTab.id, {
         type: "DELETE",
         value: bookmarkTime
-    },viewBookmarks);
+    }, viewBookmarks);
 };
 
 const setBookmarkAttributes = (src, eventListner, controlParentElement) => {
-    90
     const controlElement = document.createElement("img");
 
     controlElement.src = "assets/" + src + ".png";
@@ -74,9 +70,8 @@ const setBookmarkAttributes = (src, eventListner, controlParentElement) => {
 
 document.addEventListener("DOMContentLoaded", async () => {
     const activeTabURL = await getActiveTabURL();
-    const queryParameters = activeTabURL.split("?")[1];
+    const queryParameters = activeTabURL.url.split("?")[1];
     const urlParams = new URLSearchParams(queryParameters);
-
     const currentVideo = urlParams.get("v");
 
     if (activeTabURL.url.includes("youtube.com/watch") && currentVideo) {
