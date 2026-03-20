@@ -46,7 +46,7 @@ const Card = () => {
           >
             <h2 className="text-[10px] font-bold">Acetrenity UI Component</h2>
             <p className="mt-2 text-neutral-600">
-              A collection beautiful UI components , let's get on with it.
+              A collection beautiful UI components , let&apos;s get on with it.
             </p>
             <div className="flex items-center justify-center">
               <button
@@ -64,6 +64,7 @@ const Card = () => {
                 <IconX className="h-3 w-3 text-neutral-400" />
               </button>
             </div>
+            
             <div className="relative mt-4 flex-1 rounded-lg border border-dashed border-neutral-300 bg-gray-100">
               <motion.div
                 initial={{
