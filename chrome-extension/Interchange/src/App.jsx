@@ -27,7 +27,7 @@ function App() {
     });
 
     if (secondTab && secondTab.id === tab.id) {
-      alert("Please Select another tab");
+      alert("Don't select the same tab");
     }
     else {
       setFirstTab(tab);
@@ -46,7 +46,7 @@ function App() {
     });
 
     if (firstTab && firstTab.id === tab.id) {
-      alert("Please select another tab");
+      alert("Don't select the same tab");
     }
     else {
       setSecondTab(tab);
@@ -65,7 +65,7 @@ function App() {
           Interchange
         </h2>
 
-        <div className="flex items-center justify-center gap-32 px-2 mt-2 mb-4">
+        <div className="flex items-center justify-center gap-32 px-2 mt-2 mb-4 min-w-[440px]">
           <motion.span className="text-white/90">
             <AnimatePresence mode="wait">
               <motion.span
@@ -136,7 +136,7 @@ function App() {
         <div className="flex flex-col items-center gap-2 mt-2">
           {/* First Tab */}
           <div className="relative w-full h-14 bg-white rounded-md">
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
               {firstLoading ? (
                 // First tab spinner
                 <div className="flex justify-center items-center w-full h-full">
@@ -144,34 +144,65 @@ function App() {
                 </div>
               ) : firstTab ? (
                 // First tab info
-                <motion.div className="flex items-center w-full h-full px-2 justify-between">
-                  <img src={firstTab.favIconUrl} className="h-full" alt="FIRST TAB WEBSITE ICON" />
+                <motion.div
+                  key={firstTab.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex items-center w-full h-full px-2 justify-between"
+                >
+                  <motion.img
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.2 }}
+                    src={firstTab.favIconUrl}
+                    className="h-full"
+                    alt="FIRST TAB WEBSITE ICON"
+                  />
 
-                  <p className="flex-1 px-3 py-1 rounded-full text-black text-sm whitespace-nowrap overflow-hidden text-ellipsis font-medium">
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2, delay: 0.05 }}
+                    className="flex-1 max-w-80 px-3 py-1 rounded-full text-black text-sm whitespace-nowrap overflow-hidden text-ellipsis font-medium"
+                  >
                     {firstTab.title}
-                  </p>
+                  </motion.p>
 
-                  <button className=" h-[90%] duration-300 w-fit cursor-pointer px-2 transition rounded-md hover:bg-black/10" onClick={() => deleteOnClick(1)}>
+                  <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2, delay: 0.02 }}
+                    className=" h-[90%] duration-300 w-fit cursor-pointer px-2 transition rounded-md hover:bg-black/10"
+                    onClick={() => deleteOnClick(1)}
+                  >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-[50%] text-black" viewBox="0 0 28 28">
                       <path fill="currentColor" d="M11.5 6h5a2.5 2.5 0 0 0-5 0ZM10 6a4 4 0 0 1 8 0h6.25a.75.75 0 0 1 0 1.5h-1.31l-1.217 14.603A4.25 4.25 0 0 1 17.488 26h-6.976a4.25 4.25 0 0 1-4.235-3.897L5.06 7.5H3.75a.75.75 0 0 1 0-1.5H10ZM7.772 21.978a2.75 2.75 0 0 0 2.74 2.522h6.976a2.75 2.75 0 0 0 2.74-2.522L21.436 7.5H6.565l1.207 14.478ZM11.75 11a.75.75 0 0 1 .75.75v8.5a.75.75 0 0 1-1.5 0v-8.5a.75.75 0 0 1 .75-.75Zm5.25.75a.75.75 0 0 0-1.5 0v8.5a.75.75 0 0 0 1.5 0v-8.5Z" />
                     </svg>
-                  </button>
+                  </motion.button>
                 </motion.div>
               ) : (
                 // First tab add
-                <button id="firstTabAdd" className="gap-1 text-lg w-full h-full flex justify-center items-center hover:bg-black/10 transition font-[Comic]" onClick={firstAddButtonOnClick}>
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  id="firstTabAdd"
+                  className="gap-1 text-lg w-full h-full flex justify-center items-center hover:bg-black/10 transition font-[Comic]"
+                  onClick={firstAddButtonOnClick}
+                >
                   Add current tab
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-5 text-black" viewBox="0 0 56 56">
                     <path fill="currentColor" d="M46.867 9.262c-2.39-2.39-5.765-2.766-9.75-2.766H18.836c-3.937 0-7.312.375-9.703 2.766c-2.39 2.39-2.742 5.742-2.742 9.656v18.094c0 4.008.351 7.336 2.742 9.726c2.39 2.39 5.766 2.766 9.773 2.766h18.211c3.985 0 7.36-.375 9.75-2.766c2.391-2.39 2.742-5.718 2.742-9.726V18.988c0-4.008-.351-7.36-2.742-9.726m-1.031 9.07v19.313c0 2.437-.305 4.921-1.71 6.351c-1.43 1.406-3.962 1.734-6.376 1.734h-19.5c-2.414 0-4.945-.328-6.351-1.734c-1.43-1.43-1.735-3.914-1.735-6.352V18.403c0-2.46.305-4.992 1.711-6.398c1.43-1.43 3.984-1.734 6.445-1.734h19.43c2.414 0 4.945.328 6.375 1.734c1.406 1.43 1.711 3.914 1.711 6.328M28 40.504c.938 0 1.688-.727 1.688-1.664v-9.164h9.164c.937 0 1.687-.797 1.687-1.664c0-.914-.75-1.688-1.687-1.688h-9.164v-9.187c0-.938-.75-1.664-1.688-1.664a1.64 1.64 0 0 0-1.664 1.664v9.187h-9.164c-.938 0-1.688.774-1.688 1.688c0 .867.75 1.664 1.688 1.664h9.164v9.164c0 .937.727 1.664 1.664 1.664" />
                   </svg>
-                </button>
+                </motion.button>
               )}
             </AnimatePresence>
           </div>
 
           {/* Second Tab */}
           <div className="relative w-full h-14 bg-white rounded-md">
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
               {secondLoading ? (
                 // Second tab spinner
                 <div className="flex justify-center items-center w-full h-full">
@@ -179,27 +210,56 @@ function App() {
                 </div>
               ) : secondTab ? (
                 // Second tab info
-                <motion.div className="flex items-center w-full h-full px-2 justify-between">
-                  <img src={secondTab.favIconUrl} className="h-full" />
+                <motion.div
+                  key={secondTab.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex items-center w-full h-full px-2 justify-between"
+                >
+                  <motion.img
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.2 }}
+                    src={secondTab.favIconUrl}
+                    className="h-full"
+                  />
 
-                  <p className="flex-1 px-3 py-1 rounded-full text-black text-sm whitespace-nowrap overflow-hidden text-ellipsis font-medium">
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2, delay: 0.05 }}
+                    className="flex-1 max-w-80 px-3 py-1 rounded-full text-black text-sm whitespace-nowrap overflow-hidden text-ellipsis font-medium"
+                  >
                     {secondTab.title}
-                  </p>
+                  </motion.p>
 
-                  <button className=" h-[90%] duration-300 w-fit cursor-pointer px-2 transition rounded-md hover:bg-black/10" onClick={() => deleteOnClick(2)}>
+                  <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2, delay: 0.02 }}
+                    className=" h-[90%] duration-300 w-fit cursor-pointer px-2 transition rounded-md hover:bg-black/10"
+                    onClick={() => deleteOnClick(2)}
+                  >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-[50%] text-black" viewBox="0 0 24 24">
                       <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19.5 5.5l-.62 10.025c-.158 2.561-.237 3.842-.88 4.763a4 4 0 0 1-1.2 1.128c-.957.584-2.24.584-4.806.584c-2.57 0-3.855 0-4.814-.585a4 4 0 0 1-1.2-1.13c-.642-.922-.72-2.205-.874-4.77L4.5 5.5M3 5.5h18m-4.944 0l-.683-1.408c-.453-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.035 2c-1.066 0-1.599 0-2.04.234a2 2 0 0 0-.278.18c-.395.303-.616.788-1.058 1.757L8.053 5.5m1.447 11v-6m5 6v-6" color="currentColor" />
                     </svg>
-                  </button>
+                  </motion.button>
                 </motion.div>
               ) : (
                 // Second tab add
-                <button id="secondTabAdd" className="gap-1 text-lg w-full h-full flex justify-center items-center hover:bg-black/10 transition font-[Comic]" onClick={secondAddButtonOnClick}>
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  id="secondTabAdd"
+                  className="gap-1 text-lg w-full h-full flex justify-center items-center hover:bg-black/10 transition font-[Comic]" onClick={secondAddButtonOnClick}
+                >
                   Add current tab
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-5 text-black" viewBox="0 0 56 56">
                     <path fill="currentColor" d="M46.867 9.262c-2.39-2.39-5.765-2.766-9.75-2.766H18.836c-3.937 0-7.312.375-9.703 2.766c-2.39 2.39-2.742 5.742-2.742 9.656v18.094c0 4.008.351 7.336 2.742 9.726c2.39 2.39 5.766 2.766 9.773 2.766h18.211c3.985 0 7.36-.375 9.75-2.766c2.391-2.39 2.742-5.718 2.742-9.726V18.988c0-4.008-.351-7.36-2.742-9.726m-1.031 9.07v19.313c0 2.437-.305 4.921-1.71 6.351c-1.43 1.406-3.962 1.734-6.376 1.734h-19.5c-2.414 0-4.945-.328-6.351-1.734c-1.43-1.43-1.735-3.914-1.735-6.352V18.403c0-2.46.305-4.992 1.711-6.398c1.43-1.43 3.984-1.734 6.445-1.734h19.43c2.414 0 4.945.328 6.375 1.734c1.406 1.43 1.711 3.914 1.711 6.328M28 40.504c.938 0 1.688-.727 1.688-1.664v-9.164h9.164c.937 0 1.687-.797 1.687-1.664c0-.914-.75-1.688-1.687-1.688h-9.164v-9.187c0-.938-.75-1.664-1.688-1.664a1.64 1.64 0 0 0-1.664 1.664v9.187h-9.164c-.938 0-1.688.774-1.688 1.688c0 .867.75 1.664 1.688 1.664h9.164v9.164c0 .937.727 1.664 1.664 1.664" />
                   </svg>
-                </button>
+                </motion.button>
               )}
             </AnimatePresence>
           </div>
